@@ -4,12 +4,21 @@ import com.mercadolibre.frescos_api_grupo_2_w2.config.SpringConfig;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.ScopeUtils;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@SpringBootApplication
+@SpringBootApplication()
 public class Application {
 	public static void main(String[] args) {
 		ScopeUtils.calculateScopeSuffix();
 		new SpringApplicationBuilder(SpringConfig.class).registerShutdownHook(true)
 				.run(args);
+	}
+
+	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder;
 	}
 }

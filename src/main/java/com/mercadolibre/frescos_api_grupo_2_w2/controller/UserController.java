@@ -31,7 +31,7 @@ public class UserController {
     public ResponseEntity<User> createSeller(@Valid @RequestBody SellerDTO user) {
         user.setPassword(encoder.encode(user.getPassword()));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
+       return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 
     @PostMapping("/supervisor")
