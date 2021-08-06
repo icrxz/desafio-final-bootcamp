@@ -3,6 +3,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
+import org.hibernate.cfg.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,8 +19,8 @@ import java.util.Date;
 
 public class JWTAutenticateFilter extends UsernamePasswordAuthenticationFilter {
 
-    public static final int TOKEN_EXPIRACAO = 600_000;
-    public static final String TOKEN_SENHA = "463408a1-54c9-4307-bb1c-6cced559f5a7";
+    public static final int TOKEN_EXPIRATION = 86_400_000;
+    public static final String TOKEN_PASSWORD = System.getenv("TOKEN_PASSWORD");
 
     private final AuthenticationManager authenticationManager;
 
@@ -57,8 +58,8 @@ public class JWTAutenticateFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = JWT.create().
                 withSubject(usuarioData.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRACAO))
-                .sign(Algorithm.HMAC512(TOKEN_SENHA));
+                .withExpiresAt(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION))
+                .sign(Algorithm.HMAC512(TOKEN_PASSWORD));
 
         response.getWriter().write(token);
         response.getWriter().flush();
