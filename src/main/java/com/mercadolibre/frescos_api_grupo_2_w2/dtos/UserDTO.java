@@ -12,12 +12,12 @@ public abstract class UserDTO {
     @JsonIgnore
     private Long userId;
 
-    @NotNull
-    @NotBlank
-    @Email
+    @NotNull(message = "O email deverá ser informado.")
+    @NotBlank(message = "O email deverá ser informado.")
+    @Email(message = "Formato de email inválido.")
     private String email;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "O password deverá ser informado.")
+    @NotBlank(message = "O password deverá ser informado.")
     private String password;
 }
