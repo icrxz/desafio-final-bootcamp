@@ -2,8 +2,8 @@ package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.WarehouseDTO;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.WarehouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class WarehouseService {
         Warehouse foundWarehouse = warehouseRepository.findById(warehouseId).orElse(null);
 
         if (foundWarehouse == null) {
-            //TODO throw custom exception
+            throw new ApiException("404", "Warehouse not found with this id", 404);
         }
 
         return foundWarehouse;

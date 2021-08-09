@@ -3,7 +3,7 @@ package com.mercadolibre.frescos_api_grupo_2_w2.services;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.ProductDTO;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class ProductService {
         Product product = Product.builder()
                 .name(productDTO.getName())
                 .seller(foundSeller)
-                .type(ProductTypeEnum.valueOf(productDTO.getType()))
+                .type(productDTO.getType())
                 .build();
 
         return productRepository.save(product);
@@ -37,7 +37,7 @@ public class ProductService {
         Product foundProduct = productRepository.findById(productId).orElse(null);
 
         if (foundProduct == null) {
-            //TODO throw custom exception
+            throw new ApiException("404", "Product not found with this id", 404);
         }
 
         return foundProduct;

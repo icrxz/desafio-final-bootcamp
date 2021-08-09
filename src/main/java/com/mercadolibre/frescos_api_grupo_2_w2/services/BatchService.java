@@ -4,6 +4,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.dtos.BatchDTO;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Section;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.BatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,9 @@ public class BatchService {
         Long sectionCurrentSize = sectionService.getSectionCurrentSize(section.getSectionId());
 
         if (section.getProductType() != batch.getProduct().getType()) {
-
+            throw new ApiException("400", "Product and Section mut be of the same type", 400);
         } else if (sectionCurrentSize - batch.getCurrentQuantity() < 0) {
-
+            throw new ApiException("400", "Section don't have enough capacity", 400);
         }
     }
 
