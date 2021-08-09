@@ -32,9 +32,11 @@ public class UserService implements UserDetailsService {
         if (userDTO instanceof SellerDTO) {
             newUser = new Seller();
             BeanUtils.copyProperties(userDTO, newUser);
+            newUser.setRole("SELLER");
         } else if (userDTO instanceof SupervisorDTO) {
             newUser = new Supervisor();
             BeanUtils.copyProperties(userDTO, newUser);
+            newUser.setRole("SUPERVISOR");
         } else {
             // TODO exception
         }
@@ -48,11 +50,22 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        System.out.println("\n\n\n\n ENTROU NO SERVICE \n\n\n\n");
         Optional<User> user = userRepository.findByEmail(s);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
         }
 
         return new DetailUserData(user);
+    }
+
+    public User loadUserByEmail(String s) throws UsernameNotFoundException {
+        System.out.println("\n\n\n\n ENTROU NO SERVICE \n\n\n\n");
+        Optional<User> user = userRepository.findByEmail(s);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
+        }
+
+        return user.orElse(new User());
     }
 }
