@@ -1,5 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.entities;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,10 +9,11 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class BatchStock {
+@Builder
+public class Batch {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long number;
+    private long batchId;
 
     @ManyToOne
     private Product product;
@@ -19,6 +21,7 @@ public class BatchStock {
     @ManyToOne
     private InboundOrder inboundOrder;
 
+    private long number;
     private Float currentTemperature;
     private Float minimumTemperature;
     private int initialQuantity;

@@ -1,5 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.entities;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Builder
 public class InboundOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -18,5 +20,5 @@ public class InboundOrder {
     private Section section;
 
     @OneToMany(mappedBy = "inboundOrder")
-    private List<BatchStock> batchStock;
+    private List<Batch> batchStock;
 }
