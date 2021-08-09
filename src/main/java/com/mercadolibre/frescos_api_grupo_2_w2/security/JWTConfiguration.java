@@ -34,7 +34,7 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/user/seller").permitAll();;
+                .antMatchers(HttpMethod.POST, "/api/v1/user/seller").permitAll();
 
 
         http.csrf().disable().authorizeRequests()
