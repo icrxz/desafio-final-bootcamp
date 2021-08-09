@@ -2,11 +2,10 @@ package com.mercadolibre.frescos_api_grupo_2_w2.security;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 public class DetailUserData implements UserDetails {
 
@@ -18,7 +17,10 @@ public class DetailUserData implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+        authorities.add(new SimpleGrantedAuthority(usuario.orElse(new User()).getRole()));
+        return authorities;
     }
 
     @Override
