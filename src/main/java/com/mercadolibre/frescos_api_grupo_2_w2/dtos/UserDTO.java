@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public abstract class UserDTO {
     @JsonIgnore
-    private Long userId;
+    private long userId;
 
     @NotNull(message = "O email deverá ser informado.")
     @NotBlank(message = "O email deverá ser informado.")
