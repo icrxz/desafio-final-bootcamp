@@ -70,7 +70,6 @@ public class JWTAutenticateFilter extends UsernamePasswordAuthenticationFilter {
 
         DetailUserData usuarioData = (DetailUserData) authResult.getPrincipal();
         usuarioData.getAuthorities().toString();
-        System.out.println("\n\n\n\nCriação do token fim: ");
         GrantedAuthority claim = usuarioData.getAuthorities().stream().findFirst().orElse(null);
 
         String token;

@@ -50,7 +50,6 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        System.out.println("\n\n\n\n ENTROU NO SERVICE \n\n\n\n");
         Optional<User> user = userRepository.findByEmail(s);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
@@ -60,7 +59,6 @@ public class UserService implements UserDetailsService {
     }
 
     public User loadUserByEmail(String s) throws UsernameNotFoundException {
-        System.out.println("\n\n\n\n ENTROU NO SERVICE \n\n\n\n");
         Optional<User> user = userRepository.findByEmail(s);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
