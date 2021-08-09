@@ -6,6 +6,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.dtos.UserDTO;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.InternalServerErrorException;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.UserAlreadyExists;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.security.DetailUserData;
@@ -32,11 +33,13 @@ public class UserService implements UserDetailsService {
         if (userDTO instanceof SellerDTO) {
             newUser = new Seller();
             BeanUtils.copyProperties(userDTO, newUser);
+            newUser.setRole("SELLER");
         } else if (userDTO instanceof SupervisorDTO) {
             newUser = new Supervisor();
             BeanUtils.copyProperties(userDTO, newUser);
+            newUser.setRole("SUPERVISOR");
         } else {
-            // TODO exception
+            throw new InternalServerErrorException(null);
         }
 
         Optional<User> user = this.userRepository.findByEmail(userDTO.getEmail());
@@ -54,5 +57,14 @@ public class UserService implements UserDetailsService {
         }
 
         return new DetailUserData(user);
+    }
+
+    public User loadUserByEmail(String s) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByEmail(s);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
+        }
+
+        return user.orElse(new User());
     }
 }
