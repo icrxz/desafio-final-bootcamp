@@ -1,17 +1,16 @@
 # "test" suffix properties file. Scopes name samples: "test", "web-test", "api-test", etc.
 # Overrides application.yml default properties
 
-
 spring:
   datasource:
-    url: jdbc:mysql://proxysql.master.meliseginf.com:6612/frescoAPI?useSSL=true&serverTimezone=UTC&characterEncoding=UTF-8
-    username: ${LOCAL_DB_USER}
-    password: ${LOCAL_DB_PASS}
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
   jpa:
-    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  h2:
+    console:
+      path: /h2-console
+      enabled: true

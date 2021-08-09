@@ -1,2 +1,14 @@
 # "prod" suffix properties file. Scopes name samples: "prod", "web-prod", "api-prod", etc.
 # Overrides application.yml default properties
+
+spring:
+  datasource:
+    host: DB_MYSQL_DESAENV04_FRESCOAPI_FRESCOAPI_ENDPOINT
+    db: frescoAPI
+    username: frescoAPI_WPROD
+    password: DB_MYSQL_DESAENV04_FRESCOAPI_FRESCOAPI_WPROD
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
