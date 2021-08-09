@@ -6,6 +6,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.dtos.UserDTO;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.InternalServerErrorException;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.UserAlreadyExists;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.security.DetailUserData;
@@ -38,7 +39,7 @@ public class UserService implements UserDetailsService {
             BeanUtils.copyProperties(userDTO, newUser);
             newUser.setRole("SUPERVISOR");
         } else {
-            // TODO exception
+            throw new InternalServerErrorException(null);
         }
 
         Optional<User> user = this.userRepository.findByEmail(userDTO.getEmail());
