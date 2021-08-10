@@ -1,4 +1,4 @@
-package com.mercadolibre.frescos_api_grupo_2_w2.dtos;
+package com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-public abstract class UserDTO {
+public abstract class UserForm {
     @JsonIgnore
     private long userId;
 

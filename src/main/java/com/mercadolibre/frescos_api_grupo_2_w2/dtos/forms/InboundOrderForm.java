@@ -1,4 +1,4 @@
-package com.mercadolibre.frescos_api_grupo_2_w2.dtos;
+package com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class InboundOrderDTO {
+public class InboundOrderForm {
     @NotNull
     @JsonFormat(pattern = "dd/MM/yyyy")
     @JsonProperty("order_date")
@@ -22,9 +22,9 @@ public class InboundOrderDTO {
     private long orderNumber;
     @NotNull
     @Valid
-    private InboundOrderSectionDTO section;
+    private InboundOrderSectionForm section;
     @NotNull
     @Valid
     @JsonProperty("batch_stock")
-    private List<BatchDTO> batchStock;
+    private List<BatchForm> batchStock;
 }
