@@ -59,13 +59,15 @@ public class UserService implements UserDetailsService {
         return new DetailUserData(user);
     }
 
-    public List<User> getUsers() { return userRepository.findAll(); }
+    public List<User> getUsers() {
+        return userRepository.findAll();
+    }
     
     public User loadUserByEmail(String s) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(s);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
         }
-        return user.orElse(new User());
+        return user.get();
     }
 }
