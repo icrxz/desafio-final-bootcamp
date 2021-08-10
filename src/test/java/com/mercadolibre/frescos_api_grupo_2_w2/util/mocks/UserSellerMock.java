@@ -3,7 +3,6 @@ package com.mercadolibre.frescos_api_grupo_2_w2.util.mocks;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SellerForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import org.springframework.beans.BeanUtils;
-
 import java.util.Optional;
 
 public class UserSellerMock {

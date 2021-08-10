@@ -17,7 +17,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -98,5 +102,65 @@ public class UserServiceTest {
         //act
         assertThatThrownBy(() -> userService.createUser(new AnyUserClass()))
                 .isInstanceOf(InternalServerErrorException.class);
+    }
+
+    @Test()
+    @DisplayName("should return a valid user by username provided if was registered")
+    void loadUserByUsername_succeeds() {
+        //arrange
+        given(userRepository.findByEmail("any_email@email.com")).willReturn(Optional.of(UserSellerMock.validSeller(Optional.of(1L))));
+
+        // act
+        UserDetails createdUser = this.userService.loadUserByUsername("any_email@email.com");
+
+        // assert
+        assertThat(createdUser.getUsername()).isEqualTo("any_email@email.com");
+    }
+
+    @Test()
+    @DisplayName("should throws if email provided not belong to any user")
+    void loadUserByUsername_notFoundUser() {
+        //arrange
+        given(userRepository.findByEmail("any_email@email.com")).willReturn(Optional.empty());
+
+        //act
+        assertThatThrownBy(() -> userService.loadUserByUsername("any_email@email.com"))
+                .isInstanceOf(UsernameNotFoundException.class);
+    }
+
+    @Test()
+    @DisplayName("should return a valid user list if getUsers succeeds")
+    void getUsers_succeeds() {
+        List<User> users = Arrays.asList(UserSellerMock.validSeller(Optional.of(1L)), UserSupervisorMock.validSupervisor(Optional.of(2L)));
+        //arrange
+        given(userRepository.findAll()).willReturn(users);
+        List<User> responseUsers = this.userService.getUsers();
+
+        //act
+        assertThat(responseUsers).isEqualTo(users);
+    }
+
+    @Test()
+    @DisplayName("should return a valid user by email provided if was registered")
+    void loadUserByEmail_succeeds () {
+        //arrange
+        given(userRepository.findByEmail("any_email@email.com")).willReturn(Optional.of(UserSellerMock.validSeller(Optional.of(1L))));
+
+        // act
+        User user = this.userService.loadUserByEmail("any_email@email.com");
+
+        // assert
+        assertThat(user.getEmail()).isEqualTo("any_email@email.com");
+    }
+
+    @Test()
+    @DisplayName("should throw if email provided not belong to any user")
+    void loadUserByEmail_notFoundUser () {
+        //arrange
+        given(userRepository.findByEmail("any_email@email.com")).willReturn(Optional.empty());
+
+        //act
+        assertThatThrownBy(() -> userService.loadUserByEmail("any_email@email.com"))
+          .isInstanceOf(UsernameNotFoundException.class);
     }
 }
