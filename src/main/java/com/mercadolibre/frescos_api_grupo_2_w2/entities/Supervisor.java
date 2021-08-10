@@ -8,6 +8,7 @@ import javax.persistence.OneToOne;
 @Data
 @Entity
 public class Supervisor extends User {
+
     @OneToOne
     private Warehouse warehouse;
 }

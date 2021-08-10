@@ -31,3 +31,5 @@ app:
   description: @project.description@
   version: @project.version@
 
+TOKEN_PASSWORD: ${TOKEN_PASSWORD}
+

@@ -1,14 +1,14 @@
-package com.mercadolibre.frescos_api_grupo_2_w2.dtos;
+package com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Validated
-public class SupervisorDTO extends UserDTO{
+public class SupervisorForm extends UserForm {
 
     @JsonIgnore
     private Warehouse warehouse;
