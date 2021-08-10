@@ -1,8 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.util.mocks;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.SellerDTO;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.SupervisorDTO;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SupervisorForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import org.springframework.beans.BeanUtils;
 
@@ -21,9 +19,9 @@ public class UserSupervisorMock {
         return supervisorMock;
     }
 
-    public static SupervisorDTO validSupervisorDTO () {
+    public static SupervisorForm validSupervisorDTO () {
         Supervisor sellerMock = validSupervisor(null);
-        SupervisorDTO supervisorDTO = new SupervisorDTO();
+        SupervisorForm supervisorDTO = new SupervisorForm();
         BeanUtils.copyProperties(sellerMock, supervisorDTO, "userId");
         return supervisorDTO;
     }
