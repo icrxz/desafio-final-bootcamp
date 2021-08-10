@@ -1,6 +1,8 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.ProductDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.ProductForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.ProductMapper;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
@@ -21,16 +23,17 @@ public class ProductService {
         this.sellerService = sellerService;
     }
 
-    public Product createProduct(ProductDTO productDTO) {
-        Seller foundSeller = sellerService.findSeller(productDTO.getSellerId());
+    public ProductResponse createProduct(ProductForm productForm) {
+        Seller foundSeller = sellerService.findSeller(productForm.getSellerId());
 
         Product product = Product.builder()
-                .name(productDTO.getName())
+                .name(productForm.getName())
                 .seller(foundSeller)
-                .type(productDTO.getType())
+                .type(productForm.getType())
                 .build();
+        Product createdProduct = productRepository.save(product);
 
-        return productRepository.save(product);
+        return ProductMapper.entityToResponse(createdProduct);
     }
 
     public Product findProductById(UUID productId) {

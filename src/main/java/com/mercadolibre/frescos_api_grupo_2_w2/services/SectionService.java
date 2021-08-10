@@ -1,6 +1,8 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.SectionDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SectionForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.SectionMapper;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.SectionResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Section;
@@ -36,16 +38,16 @@ public class SectionService {
         return foundSection;
     }
 
-    public Section createSection(SectionDTO sectionDTO) {
-        Warehouse foundWarehouse = warehouseService.findWarehouseById(UUID.fromString(sectionDTO.getWarehouseId()));
+    public SectionResponse createSection(SectionForm sectionForm) {
+        Warehouse foundWarehouse = warehouseService.findWarehouseById(UUID.fromString(sectionForm.getWarehouseId()));
 
         Section newSection = Section.builder()
                 .warehouse(foundWarehouse)
-                .maxCapacity(sectionDTO.getMaxCapacity())
-                .productType(sectionDTO.getProductType())
+                .maxCapacity(sectionForm.getMaxCapacity())
+                .productType(sectionForm.getProductType())
                 .build();
 
-        return sectionRepository.save(newSection);
+        return SectionMapper.entityToResponse(sectionRepository.save(newSection));
     }
 
     public Long getSectionCurrentSize(UUID sectionId) {

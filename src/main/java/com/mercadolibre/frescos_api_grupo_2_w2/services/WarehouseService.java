@@ -1,6 +1,8 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.WarehouseDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.WarehouseForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.WarehouseMapper;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.WarehouseResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
@@ -32,12 +34,12 @@ public class WarehouseService {
         return foundWarehouse;
     }
 
-    public Warehouse createWarehouse(WarehouseDTO warehouseDTO) {
-        Supervisor foundSupervisor = supervisorService.findSupervisor(warehouseDTO.getSupervisorId());
+    public WarehouseResponse createWarehouse(WarehouseForm warehouseForm) {
+        Supervisor foundSupervisor = supervisorService.findSupervisor(warehouseForm.getSupervisorId());
 
         Warehouse newWarehouse = Warehouse.builder().supervisor(foundSupervisor).build();
 
-        return warehouseRepository.save(newWarehouse);
+        return WarehouseMapper.entityToResponse(warehouseRepository.save(newWarehouse));
     }
 
     public List<Warehouse> getWarehouses() { return warehouseRepository.findAll(); }
