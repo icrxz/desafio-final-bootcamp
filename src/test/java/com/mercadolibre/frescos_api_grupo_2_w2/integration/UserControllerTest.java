@@ -2,7 +2,7 @@ package com.mercadolibre.frescos_api_grupo_2_w2.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.SellerDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SellerForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
@@ -48,10 +48,10 @@ class UserControllerTest extends ControllerTest {
     @Test
     @DisplayName("should create a userSeller")
     void createUser_userSellerSucceeds() throws Exception {
-        SellerDTO seller = UserSellerMock.validSellerDTO();
+        SellerForm seller = UserSellerMock.validSellerForm();
         seller.setEmail("new_user_seller@email.com");
 
-        HttpEntity<SellerDTO> request = new HttpEntity<>(seller);
+        HttpEntity<SellerForm> request = new HttpEntity<>(seller);
 
         ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/user/seller", request, String.class);
 
@@ -62,7 +62,7 @@ class UserControllerTest extends ControllerTest {
     @Test
     @DisplayName("should return 400 if a invalid payload are provided")
     void createUser_userSellerInvalidPayload() throws Exception {
-        HttpEntity<SellerDTO> request = new HttpEntity<>(new SellerDTO());
+        HttpEntity<SellerForm> request = new HttpEntity<>(new SellerForm());
 
         ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/user/seller", request, String.class);
         assertEquals(400, result.getStatusCodeValue());
@@ -71,13 +71,13 @@ class UserControllerTest extends ControllerTest {
     @Test
     @DisplayName("should return 403 if a unauthorized token are provied")
     void createUser_userSupervisorNotAuthorized() throws Exception {
-        SellerDTO seller = UserSellerMock.validSellerDTO();
+        SellerForm seller = UserSellerMock.validSellerForm();
         seller.setEmail("new_user_supervisor@email.com");
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);
 
-        HttpEntity<SellerDTO> request = new HttpEntity<>(seller, header);
+        HttpEntity<SellerForm> request = new HttpEntity<>(seller, header);
 
         ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/user/supervisor", request, String.class);
 
@@ -102,13 +102,13 @@ class UserControllerTest extends ControllerTest {
         ResponseEntity<String> responseEntity = this.testRestTemplate.postForEntity("/login", jsonPayload, String.class);
         token = "Bearer "+ responseEntity.getBody();
 
-        SellerDTO seller = UserSellerMock.validSellerDTO();
+        SellerForm seller = UserSellerMock.validSellerForm();
         seller.setEmail("new_user_supervisor@email.com");
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);
 
-        HttpEntity<SellerDTO> request = new HttpEntity<>(seller, header);
+        HttpEntity<SellerForm> request = new HttpEntity<>(seller, header);
         ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/user/supervisor", request, String.class);
         assertEquals(201, result.getStatusCodeValue());
     }

@@ -19,7 +19,7 @@ public class UserSellerMock {
         return sellerMock;
     }
 
-    public static SellerForm validSellerDTO () {
+    public static SellerForm validSellerForm () {
         Seller sellerMock = validSeller(null);
         SellerForm sellerDTO = new SellerForm();
         BeanUtils.copyProperties(sellerMock, sellerDTO, "userId");
