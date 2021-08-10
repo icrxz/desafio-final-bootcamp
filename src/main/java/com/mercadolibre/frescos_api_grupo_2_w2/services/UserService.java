@@ -56,7 +56,6 @@ public class UserService implements UserDetailsService {
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
         }
-
         return new DetailUserData(user);
     }
 
@@ -67,7 +66,6 @@ public class UserService implements UserDetailsService {
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
         }
-
         return user.orElse(new User());
     }
 }
