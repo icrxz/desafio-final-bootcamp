@@ -17,7 +17,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -98,5 +101,29 @@ public class UserServiceTest {
         //act
         assertThatThrownBy(() -> userService.createUser(new AnyUserClass()))
                 .isInstanceOf(InternalServerErrorException.class);
+    }
+
+    @Test()
+    @DisplayName("should return a valid user by username provided if was registered")
+    void loadUserByUsername_succeeds () {
+        //arrange
+        given(userRepository.findByEmail("any_email@email.com")).willReturn(Optional.of(UserSellerMock.validSeller(Optional.of(1L))));
+
+        // act
+        UserDetails createdUser = this.userService.loadUserByUsername("any_email@email.com");
+
+        // assert
+        assertThat(createdUser.getUsername()).isEqualTo("any_email@email.com");
+    }
+
+    @Test()
+    @DisplayName("should return a valid user by username provided if was registered")
+    void loadUserByUsername_notFoundUser () {
+        //arrange
+        given(userRepository.findByEmail("any_email@email.com")).willReturn(Optional.empty());
+
+        //act
+        assertThatThrownBy(() -> userService.loadUserByEmail("any_email@email.com"))
+                .isInstanceOf(UsernameNotFoundException.class);
     }
 }
