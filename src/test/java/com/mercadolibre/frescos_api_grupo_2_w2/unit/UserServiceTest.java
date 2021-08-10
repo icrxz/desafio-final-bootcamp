@@ -55,7 +55,7 @@ public class UserServiceTest {
         given(userRepository.save(selerMock)).willReturn(selerCreatedMock);
 
         // act
-        User createdUser = this.userService.createUser(UserSellerMock.validSellerDTO());
+        User createdUser = this.userService.createUser(UserSellerMock.validSellerForm());
 
         // assert
         assertThat(createdUser.getUserId()).isEqualByComparingTo(1L);
