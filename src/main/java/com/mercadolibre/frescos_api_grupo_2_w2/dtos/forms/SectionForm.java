@@ -1,4 +1,4 @@
-package com.mercadolibre.frescos_api_grupo_2_w2.dtos;
+package com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SectionDTO {
+public class SectionForm {
     @NotNull
     @Min(value = 0)
     @JsonProperty("max_capacity")

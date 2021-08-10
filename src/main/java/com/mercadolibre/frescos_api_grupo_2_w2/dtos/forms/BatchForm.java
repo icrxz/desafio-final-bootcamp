@@ -1,4 +1,4 @@
-package com.mercadolibre.frescos_api_grupo_2_w2.dtos;
+package com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-public class BatchDTO {
+public class BatchForm {
     @NotNull
     @Min(value = 0)
     @JsonProperty("batch_number")

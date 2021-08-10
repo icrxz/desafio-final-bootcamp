@@ -1,6 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.BatchDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Section;
@@ -34,18 +34,18 @@ public class BatchService {
         }
     }
 
-    public Batch createBatch(BatchDTO batchDTO, Section section) {
-        Product foundProduct = productService.findProductById(UUID.fromString(batchDTO.getProductId()));
+    public Batch createBatch(BatchForm batchForm, Section section) {
+        Product foundProduct = productService.findProductById(UUID.fromString(batchForm.getProductId()));
 
         Batch batch = Batch.builder()
-                .currentQuantity(batchDTO.getCurrentQuantity())
-                .currentTemperature(batchDTO.getCurrentTemperature())
-                .dueDate(batchDTO.getDueDate())
-                .initialQuantity(batchDTO.getInitialQuantity())
-                .manufacturingDate(batchDTO.getManufacturingDate())
-                .manufacturingTime(batchDTO.getManufacturingTime())
-                .minimumTemperature(batchDTO.getMinimumTemperature())
-                .number(batchDTO.getBatchNumber())
+                .currentQuantity(batchForm.getCurrentQuantity())
+                .currentTemperature(batchForm.getCurrentTemperature())
+                .dueDate(batchForm.getDueDate())
+                .initialQuantity(batchForm.getInitialQuantity())
+                .manufacturingDate(batchForm.getManufacturingDate())
+                .manufacturingTime(batchForm.getManufacturingTime())
+                .minimumTemperature(batchForm.getMinimumTemperature())
+                .number(batchForm.getBatchNumber())
                 .product(foundProduct)
                 .build();
 

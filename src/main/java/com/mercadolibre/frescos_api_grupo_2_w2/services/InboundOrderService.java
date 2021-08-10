@@ -1,7 +1,9 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.BatchDTO;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.InboundOrderDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrderForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.InboundOrderMapper;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.InboundOrderResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.InboundOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,29 +33,31 @@ public class InboundOrderService {
         this.sectionService = sectionService;
     }
 
-    public InboundOrder createInboundOrder(InboundOrderDTO inboundOrderDTO) {
-        Section section = sectionService.findSectionById(UUID.fromString(inboundOrderDTO.getSection().getSectionCode()));
-        Warehouse warehouse = warehouseService.findWarehouseById(UUID.fromString(inboundOrderDTO.getSection().getWarehouseCode()));
+    public InboundOrderResponse createInboundOrder(InboundOrderForm inboundOrderForm) {
+        Section section = sectionService.findSectionById(UUID.fromString(inboundOrderForm.getSection().getSectionCode()));
         List<Batch> successBatches = new ArrayList<>();
-        List<BatchDTO> failedBatches = new ArrayList<>();
+        List<BatchForm> failedBatches = new ArrayList<>();
+        List<String> errorMessages = new ArrayList<>();
 
-        inboundOrderDTO.getBatchStock().forEach(bs -> {
+        inboundOrderForm.getBatchStock().forEach(batch -> {
             try {
-                Batch createdBatch = batchService.createBatch(bs, section);
+                Batch createdBatch = batchService.createBatch(batch, section);
 
                 successBatches.add(createdBatch);
-            } catch (Exception exception) {
-                failedBatches.add(bs);
+            } catch (Exception ex) {
+                failedBatches.add(batch);
+                errorMessages.add(String.format("Error in batch %d: %s", batch.getBatchNumber(), ex.getMessage()));
             }
         });
 
         InboundOrder newInboundOrder = InboundOrder.builder()
                 .batchStock(successBatches)
-                .date(inboundOrderDTO.getOrderDate())
-                .number(inboundOrderDTO.getOrderNumber())
+                .date(inboundOrderForm.getOrderDate())
+                .number(inboundOrderForm.getOrderNumber())
                 .section(section)
                 .build();
+        InboundOrder createdInboundOrder = inboundOrderRepository.save(newInboundOrder);
 
-        return inboundOrderRepository.save(newInboundOrder);
+        return InboundOrderMapper.inboundOrderToResponse(createdInboundOrder, failedBatches, errorMessages);
     }
 }

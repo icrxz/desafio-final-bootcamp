@@ -1,8 +1,8 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.SellerDTO;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.SupervisorDTO;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.UserDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SellerForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SupervisorForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.UserForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
@@ -29,21 +29,21 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(UserDTO userDTO) {
+    public User createUser(UserForm userForm) {
         User newUser = null;
-        if (userDTO instanceof SellerDTO) {
+        if (userForm instanceof SellerForm) {
             newUser = new Seller();
-            BeanUtils.copyProperties(userDTO, newUser);
+            BeanUtils.copyProperties(userForm, newUser);
             newUser.setRole("SELLER");
-        } else if (userDTO instanceof SupervisorDTO) {
+        } else if (userForm instanceof SupervisorForm) {
             newUser = new Supervisor();
-            BeanUtils.copyProperties(userDTO, newUser);
+            BeanUtils.copyProperties(userForm, newUser);
             newUser.setRole("SUPERVISOR");
         } else {
             throw new InternalServerErrorException(null);
         }
 
-        Optional<User> user = this.userRepository.findByEmail(userDTO.getEmail());
+        Optional<User> user = this.userRepository.findByEmail(userForm.getEmail());
         if (!user.isEmpty()) {
             throw new UserAlreadyExists("Este email já está cadastrado");
         }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,5 +24,5 @@ public class Warehouse{
     private Supervisor supervisor;
 
     @OneToMany(mappedBy = "warehouse")
-    private List<Section> sections;
+    private List<Section> sections = new ArrayList<>();
 }

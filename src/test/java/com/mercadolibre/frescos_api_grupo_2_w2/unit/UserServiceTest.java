@@ -1,6 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.UserDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.UserForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
@@ -93,7 +93,7 @@ public class UserServiceTest {
     @DisplayName("should throws if User provided is not a instance of valid classes")
     void createUser_UserClassNotInstanceOfValidClasses() {
         //arrange
-        class AnyUserClass extends UserDTO {}
+        class AnyUserClass extends UserForm {}
 
         //act
         assertThatThrownBy(() -> userService.createUser(new AnyUserClass()))
