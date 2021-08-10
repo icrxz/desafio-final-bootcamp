@@ -1,7 +1,7 @@
 package com.mercadolibre.frescos_api_grupo_2_w2;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.config.SpringConfig;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.SupervisorDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SupervisorForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.UserService;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.ScopeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class Application {
 	}
 
 	private void createAdminUser() {
-		SupervisorDTO supervisor = new SupervisorDTO();
+		SupervisorForm supervisor = new SupervisorForm();
 		supervisor.setEmail("admin@admin.com");
 		supervisor.setPassword("$2a$10$JHzsz1ZmVNNYtxiiaSlyl.M8rwfyPPfePg4FRUkPmKMM4T3c2/cFi");
 
