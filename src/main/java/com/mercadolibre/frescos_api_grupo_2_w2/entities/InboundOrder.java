@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -24,5 +25,5 @@ public class InboundOrder {
     private Section section;
 
     @OneToMany(mappedBy = "inboundOrder")
-    private List<Batch> batchStock;
+    private List<Batch> batchStock = new ArrayList<>();
 }

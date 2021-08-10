@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,5 +30,5 @@ public class Section implements Serializable {
     private Warehouse warehouse;
 
     @OneToMany(mappedBy = "section")
-    private List<InboundOrder> orders;
+    private List<InboundOrder> orders = new ArrayList<>();
 }
