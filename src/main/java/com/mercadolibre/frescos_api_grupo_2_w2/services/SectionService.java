@@ -55,6 +55,6 @@ public class SectionService {
 
         List<Batch> batches = section.getOrders().stream().map(InboundOrder::getBatchStock).flatMap(Collection::stream).collect(Collectors.toList());
 
-        return batches.stream().mapToLong(Batch::getCurrentQuantity).sum();
+        return section.getMaxCapacity() - batches.stream().mapToLong(Batch::getCurrentQuantity).sum();
     }
 }
