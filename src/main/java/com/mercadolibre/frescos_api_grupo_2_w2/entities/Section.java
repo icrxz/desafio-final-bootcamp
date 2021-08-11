@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,6 +31,7 @@ public class Section implements Serializable {
     @ManyToOne
     private Warehouse warehouse;
 
-    @OneToMany(mappedBy = "section")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "section")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<InboundOrder> orders = new ArrayList<>();
 }
