@@ -43,8 +43,8 @@ public class ProductServiceTest {
     @Test
     @DisplayName("should return a product if ID succeeds")
     void findProductByIdTest () {
-        UUID productId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
-        given(productRepository.findById(productId)).willReturn(java.util.Optional.of(ProductMock.create()));
+        UUID productId = ProductMock.productID;
+        given(productRepository.findById(productId)).willReturn(java.util.Optional.of(ProductMock.validProduct()));
         Product productTest = productService.findProductById(productId);
 
         assertEquals(productId, productTest.getProductId());
@@ -54,7 +54,7 @@ public class ProductServiceTest {
     @Test
     @DisplayName("should throws if id not belong to any Product")
     void findSectionById_sectionNotFound() {
-        UUID productId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
+        UUID productId = ProductMock.productID;
 
         assertThatThrownBy(() -> productService.findProductById(productId))
                 .isInstanceOf(ProductNotFoundException.class);
@@ -63,7 +63,7 @@ public class ProductServiceTest {
     @Test
     @DisplayName("should throws if id not belong to any Product")
     void findSectionById_sectionNotFoundMessage() {
-        UUID productId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
+        UUID productId = ProductMock.productID;
 
         Throwable exception = assertThrows(ProductNotFoundException.class, () -> productService.findProductById(productId));
         assertEquals("Product not found with this id", exception.getMessage());

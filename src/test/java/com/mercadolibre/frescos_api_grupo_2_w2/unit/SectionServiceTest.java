@@ -8,6 +8,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SectionRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.SectionService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.WarehouseService;
+import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.SectionMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.WarehouseMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -46,20 +47,14 @@ public class SectionServiceTest {
     @Test
     @DisplayName("should return a Section if findSectonBy succeeds")
     void findSectionById_succeeds() {
-        //arrange
-        UUID sectionId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
-        Section section = new Section();
-        section.setSectionId(sectionId);
-        section.setMaxCapacity(100);
-        section.setProductType(ProductTypeEnum.CARNES);
 
-        given(this.sectionRepository.findById(sectionId)).willReturn(Optional.of(section));
+        given(this.sectionRepository.findById(SectionMock.sectionId)).willReturn(Optional.of(SectionMock.validSection()));
 
         // act
-        Section findSection = this.sectionService.findSectionById(sectionId);
+        Section findSection = this.sectionService.findSectionById(SectionMock.sectionId);
 
         // assert
-        assertThat(findSection.getSectionId()).isEqualTo(sectionId);
+        assertThat(findSection.getSectionId()).isEqualTo(SectionMock.sectionId);
     }
 
     @Test
@@ -75,21 +70,9 @@ public class SectionServiceTest {
     @Test
     @DisplayName("should return a Section if createSection succeeds")
     void createSection_succeeds() {
-
         //arrange
         Warehouse warehouse = WarehouseMock.validWarehouse();
-
-        //mock Section
-        SectionForm sectionForm = new SectionForm();
-        sectionForm.setMaxCapacity(100);
-        sectionForm.setWarehouseId(warehouse.getWarehouseId().toString());
-        sectionForm.setProductType(ProductTypeEnum.CARNES);
-
-        UUID sectionId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
-        Section sectionResponse = new Section();
-        sectionResponse.setSectionId(sectionId);
-        sectionResponse.setWarehouse(warehouse);
-        sectionResponse.setMaxCapacity(100);
+        SectionForm sectionForm = SectionMock.validSectionForm();
 
         Section newSection = Section.builder()
                 .warehouse(warehouse)
@@ -97,15 +80,13 @@ public class SectionServiceTest {
                 .productType(sectionForm.getProductType())
                 .build();
 
-        sectionResponse.setProductType(ProductTypeEnum.CARNES);
-
         given(this.warehouseService.findWarehouseById(warehouse.getWarehouseId())).willReturn(warehouse);
-        given(this.sectionRepository.save(newSection)).willReturn(sectionResponse);
+        given(this.sectionRepository.save(newSection)).willReturn(SectionMock.validSection());
 
         SectionResponse createdSection = this.sectionService.createSection(sectionForm);
 
         // assert
-        assertThat(createdSection.getSectionId()).isEqualTo(sectionId);
+        assertThat(createdSection.getSectionId()).isEqualTo(SectionMock.sectionId);
         assertThat(createdSection.getMaxCapacity()).isEqualTo(100);
         assertThat(createdSection.getWarehouseId()).isEqualTo(warehouse.getWarehouseId());
         assertThat(createdSection.getType()).isEqualTo(ProductTypeEnum.CARNES);
@@ -125,14 +106,7 @@ public class SectionServiceTest {
     void getSectionCurrentSize_succeeds() {
         UUID sectionId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
 
-        Section section = new Section();
-        section.setSectionId(sectionId);
-        section.setMaxCapacity(100);
-        section.setProductType(ProductTypeEnum.CARNES);
-        section.setWarehouse(WarehouseMock.validWarehouse());
-        section.setOrders(new ArrayList<>());
-
-        given(this.sectionRepository.findById(sectionId)).willReturn(Optional.of(section));
+        given(this.sectionRepository.findById(sectionId)).willReturn(Optional.of(SectionMock.validSection()));
         Long sectionCurrentSize = this.sectionService.getSectionCurrentSize(sectionId);
         assertThat(sectionCurrentSize).isEqualTo(100);
     }
