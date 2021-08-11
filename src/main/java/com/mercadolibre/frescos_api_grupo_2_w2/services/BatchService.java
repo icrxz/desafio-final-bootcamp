@@ -9,6 +9,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.repositories.BatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -54,6 +55,7 @@ public class BatchService {
         return batchRepository.save(batch);
     }
 
-        return createdBatch;
+    public List<Batch> findBatchesByProduct(UUID productId) {
+        return batchRepository.findBatchesByProduct_productId(productId);
     }
 }
