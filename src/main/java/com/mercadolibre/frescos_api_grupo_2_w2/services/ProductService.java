@@ -30,6 +30,7 @@ public class ProductService {
                 .name(productForm.getName())
                 .seller(foundSeller)
                 .type(productForm.getType())
+                .value(productForm.getValue())
                 .build();
         Product createdProduct = productRepository.save(product);
 
