@@ -51,7 +51,8 @@ public class BatchService {
 
         checkSection(section, batch);
 
-        Batch createdBatch = batchRepository.save(batch);
+        return batchRepository.save(batch);
+    }
 
         return createdBatch;
     }

@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -31,6 +31,7 @@ public class UserService implements UserDetailsService {
 
     public User createUser(UserForm userForm) {
         User newUser = null;
+
         if (userForm instanceof SellerForm) {
             newUser = new Seller();
             BeanUtils.copyProperties(userForm, newUser);
@@ -44,9 +45,11 @@ public class UserService implements UserDetailsService {
         }
 
         Optional<User> user = this.userRepository.findByEmail(userForm.getEmail());
-        if (!user.isEmpty()) {
+
+        if (user.isPresent()) {
             throw new UserAlreadyExists("Este email já está cadastrado");
         }
+
         return this.userRepository.save(newUser);
     }
 
