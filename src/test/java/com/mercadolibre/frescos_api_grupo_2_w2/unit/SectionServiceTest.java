@@ -92,33 +92,4 @@ public class SectionServiceTest {
         assertThatThrownBy(() -> sectionService.findSectionById(sectionId))
                 .isInstanceOf(ApiException.class);
     }
-
-//    @Test
-//    @DisplayName("should return a Section if createSection succeeds")
-//    void createSection_succeeds() {
-//
-//        //arrange
-//        Warehouse warehouse = WarehouseMock.validWarehouse();
-//
-////        supervisorRepository.save(UserSupervisorMock.validSupervisor(Optional.of(1L)));
-////        supervisorRepository.findAll().forEach(m -> System.out.println("User: " + m.getEmail()));
-//        //Optional<Supervisor> user = supervisorRepository.findById(3L);
-//       // System.out.println("user: " + user.get().getUserId());
-//        //System.out.println("user: " + user.get().getEmail());
-//
-//        //mock Section
-//        SectionForm sectionForm = new SectionForm();
-//        sectionForm.setMaxCapacity(100);
-//        sectionForm.setWarehouseId(warehouse.getWarehouseId().toString());
-//        sectionForm.setProductType(ProductTypeEnum.CARNES);
-//
-//        given(this.warehouseService.findWarehouseById(warehouse.getWarehouseId())).willReturn(warehouse);
-//
-//        SectionResponse createdSection = this.sectionService.createSection(sectionForm);sectionForm
-//
-//        // assert
-////        assertThat(createdSection.getWarehouseId()).isEqualTo("2b854498-fa35-11eb-9a03-0242ac130003");
-////        assertThat(createdSection.getType()).isEqualTo(ProductTypeEnum.CARNES);
-////        assertThat(createdSection.getMaxCapacity()).isEqualTo(100);
-//    }
 }
