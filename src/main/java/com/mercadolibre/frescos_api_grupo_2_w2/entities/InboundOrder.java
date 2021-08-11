@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -24,6 +26,7 @@ public class InboundOrder {
     @ManyToOne
     private Section section;
 
-    @OneToMany(mappedBy = "inboundOrder")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inboundOrder")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Batch> batchStock = new ArrayList<>();
 }
