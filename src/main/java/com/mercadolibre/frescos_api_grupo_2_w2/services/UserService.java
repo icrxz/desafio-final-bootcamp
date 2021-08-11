@@ -1,8 +1,10 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SellerForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SupervisorForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.UserForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.BuyerForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SellerForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SupervisorForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.UserForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.Buyer;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
@@ -34,16 +36,18 @@ public class UserService implements UserDetailsService {
 
         if (userForm instanceof SellerForm) {
             newUser = new Seller();
-            BeanUtils.copyProperties(userForm, newUser);
             newUser.setRole("SELLER");
         } else if (userForm instanceof SupervisorForm) {
             newUser = new Supervisor();
-            BeanUtils.copyProperties(userForm, newUser);
             newUser.setRole("SUPERVISOR");
+        } else if (userForm instanceof BuyerForm) {
+            newUser = new Buyer();
+            newUser.setRole("BUYER");
         } else {
             throw new InternalServerErrorException(null);
         }
 
+        BeanUtils.copyProperties(userForm, newUser);
         Optional<User> user = this.userRepository.findByEmail(userForm.getEmail());
 
         if (user.isPresent()) {
