@@ -34,11 +34,13 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/v1/user/supervisor").hasAuthority("SUPERVISOR");
+                .antMatchers(HttpMethod.POST, "/api/v1/user/supervisor").hasAuthority("SUPERVISOR")
+                .antMatchers(HttpMethod.POST, "/api/v1/sections").hasAuthority("SUPERVISOR");;
 
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/user/seller").permitAll();
+                .antMatchers(HttpMethod.POST, "/api/v1/user/seller").permitAll()
+                .antMatchers(HttpMethod.GET, "/fake").permitAll();
 
 
         http.csrf().disable().authorizeRequests()

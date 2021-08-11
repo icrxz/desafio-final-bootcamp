@@ -22,7 +22,6 @@ public class SectionController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('SUPERVISOR')")
     public ResponseEntity createSection(@RequestBody @Valid SectionForm sectionForm) {
         SectionResponse newSection = sectionService.createSection(sectionForm);
 
