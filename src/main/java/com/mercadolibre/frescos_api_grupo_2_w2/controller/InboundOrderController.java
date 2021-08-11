@@ -1,6 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.controller;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrderForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrder.InboundOrderForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.InboundOrderResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.InboundOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,6 @@ public class InboundOrderController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('SUPERVISOR','SELLER')")
     public ResponseEntity createInboundOrder(@RequestBody @Valid InboundOrderForm inboundOrderForm) {
         InboundOrderResponse newInboundOrder = inboundOrderService.createInboundOrder(inboundOrderForm);
 

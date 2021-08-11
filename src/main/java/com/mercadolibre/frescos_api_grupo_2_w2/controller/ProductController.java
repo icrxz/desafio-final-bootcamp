@@ -7,16 +7,12 @@ import com.mercadolibre.frescos_api_grupo_2_w2.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/v1/fresh-products")
 public class ProductController {
     private final ProductService productService;
 
@@ -26,7 +22,6 @@ public class ProductController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('SUPERVISOR','SELLER')")
     public ResponseEntity createProduct(@RequestBody @Valid ProductForm productForm) {
         ProductResponse newProduct = productService.createProduct(productForm);
 

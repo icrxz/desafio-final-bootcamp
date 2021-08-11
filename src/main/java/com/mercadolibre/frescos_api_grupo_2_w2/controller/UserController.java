@@ -8,7 +8,6 @@ import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +34,6 @@ public class UserController {
     }
 
     @PostMapping("/supervisor")
-    @PreAuthorize("hasRole('SUPERVISOR')")
     public ResponseEntity<User> createSupervisor(@Valid @RequestBody SupervisorForm user) {
         user.setPassword(encoder.encode(user.getPassword()));
 
@@ -43,7 +41,6 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('SUPERVISOR')")
     public ResponseEntity getAllUsers() {
         List<UserResponse> users = UserMapper.entityListToResponseList(userService.getUsers());
 
