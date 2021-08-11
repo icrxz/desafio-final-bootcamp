@@ -8,12 +8,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class WarehouseMock {
+    public static UUID warehouseId = UUID.fromString("2b854498-fa35-11eb-9a03-0242ac130003");
+
     public static Warehouse validWarehouse () {
         Warehouse warehouseMock = new Warehouse();
         Warehouse warehouse = new Warehouse();
-        warehouse.setWarehouseId(UUID.fromString("2b854498-fa35-11eb-9a03-0242ac130003"));
+        warehouse.setWarehouseId(UUID.fromString(warehouseId.toString()));
         warehouse.setSupervisor(UserSupervisorMock.validSupervisor());
         return warehouse;
-
     }
 }

@@ -6,10 +6,14 @@ import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.InternalServerErrorException;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.UserAlreadyExists;
+import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SellerRepository;
+import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SupervisorRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.UserService;
+import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSellerMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSupervisorMock;
+import net.bytebuddy.implementation.bind.annotation.Super;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +31,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -40,47 +45,6 @@ public class UserServiceTest {
     public void setUp() throws Exception {
         userRepository.deleteAll();
         userService = new UserService(userRepository);
-    }
-
-    @Test
-    @DisplayName("should return a User if UserSeller creation succeeds")
-    void createUser_UserSellerSucceeds() {
-        //Seller Mock
-        Seller selerMock = UserSellerMock.validSeller(null);
-
-        //Seller Mock Created
-        Seller selerCreatedMock = UserSellerMock.validSeller(Optional.of(1L));
-
-        //arrange
-        given(userRepository.save(selerMock)).willReturn(selerCreatedMock);
-
-        // act
-        User createdUser = this.userService.createUser(UserSellerMock.validSellerForm());
-
-        // assert
-        assertThat(createdUser.getUserId()).isEqualByComparingTo(1L);
-        assertThat(createdUser.getEmail()).isEqualTo("any_email@email.com");
-        assertThat(createdUser.getPassword()).isEqualTo("any_password");
-        assertThat(createdUser.getRole()).isEqualTo("SELLER");
-    }
-
-    @Test
-    @DisplayName("should return a User if UserSeller creation succeeds")
-    void createUser_UserSupervisorSucceeds() {
-        Supervisor supervisorMock = UserSupervisorMock.validSupervisor(null);
-        Supervisor supervisorCreatedMock = UserSupervisorMock.validSupervisor(Optional.of(1L));
-
-        //arrange
-        given(userRepository.save(supervisorMock)).willReturn(supervisorCreatedMock);
-
-        // act
-        User createdUser = this.userService.createUser(UserSupervisorMock.validSupervisorDTO());
-
-        // assert
-        assertThat(createdUser.getUserId()).isEqualByComparingTo(1L);
-        assertThat(createdUser.getEmail()).isEqualTo("any_email@email.com");
-        assertThat(createdUser.getPassword()).isEqualTo("any_password");
-        assertThat(createdUser.getRole()).isEqualTo("SUPERVISOR");
     }
 
     @Test()
