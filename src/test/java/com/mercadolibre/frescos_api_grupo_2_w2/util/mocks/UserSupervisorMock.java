@@ -13,6 +13,7 @@ public class UserSupervisorMock {
         supervisorMock.setEmail("any_email@email.com");
         supervisorMock.setPassword("any_password");
         supervisorMock.setRole("SUPERVISOR");
+        supervisorMock.setWarehouse(null);
 
         if (id != null) {
             supervisorMock.setUserId(id.get());
