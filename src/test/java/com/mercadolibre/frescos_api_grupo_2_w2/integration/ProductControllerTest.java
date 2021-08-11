@@ -73,16 +73,13 @@ public class ProductControllerTest extends ControllerTest {
         token = this.loginSeller();
         // arrange
        Seller sellerMock = this.userRepository.save(UserSellerMock.validSeller(Optional.of(1L)));
-       //sellerMock = this.sellerRepository.save(sellerMock);
 
-       //mock Section
+       //mock Product
        ProductForm productForm = new ProductForm();
        productForm.setName("any_name");
        productForm.setType(ProductTypeEnum.CARNES);
        productForm.setSellerId(sellerMock.getUserId());
 
-
-        //warehouse.setSupervisor(user);
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);
 
