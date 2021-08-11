@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.ProductForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.ProductMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.ProductRepository;
@@ -21,6 +23,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -69,23 +74,33 @@ public class ProductServiceTest {
         assertEquals("Product not found with this id", exception.getMessage());
 
     }
-    /*
+
      @Test
-    void createProductTest () {
-        ProductForm productForm = new ProductForm();
-        productForm.setName("any_name");
-        productForm.setType(ProductTypeEnum.CARNES);
-        productForm.setSellerId(1L);
+     @DisplayName("should return a Product creation succeeds")
+     void createProductSucceeds () {
+         UUID productId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
+         Seller sellerMock = UserSellerMock.validSeller(Optional.of(1L));
 
-        given(sellerService.findSeller(1L)).willReturn(UserSellerMock.validSeller(Optional.of(1L)));
+         ProductForm productForm = new ProductForm();
+         productForm.setName("any_name");
+         productForm.setType(ProductTypeEnum.CARNES);
+         productForm.setSellerId(sellerMock.getUserId());
 
-        //Seller foundSeller = sellerService.findSeller(1L);
+         Product product = Product.builder()
+                 .name(productForm.getName())
+                 .seller(sellerMock)
+                 .type(productForm.getType())
+                 .build();
 
-        ProductResponse product = productService.createProduct(productForm);
+         given(this.sellerService.findSeller(1L)).willReturn(UserSellerMock.validSeller(Optional.of(1L)));
+         given(this.productRepository.save(product)).willReturn(product);
 
-        assertEquals("any_name", product.getName());
+         ProductResponse createProduct = this.productService.createProduct(productForm);
+         // assert
+         assertThat(createProduct.getName()).isEqualTo("any_name");
+         assertThat(createProduct.getType()).isEqualTo(ProductTypeEnum.CARNES);
+         assertThat(createProduct.getSellerId()).isEqualTo(1L);
     }
-     */
 
 
 }
