@@ -38,11 +38,9 @@ public class ProductService {
 
     public Product findProductById(UUID productId) {
         Product foundProduct = productRepository.findById(productId).orElse(null);
-
         if (foundProduct == null) {
             throw new ApiException("404", "Product not found with this id", 404);
         }
-
         return foundProduct;
     }
 }
