@@ -1,7 +1,8 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.controller;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SellerForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SupervisorForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.BuyerForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SellerForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SupervisorForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.UserMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.UserResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
@@ -37,6 +38,12 @@ public class UserController {
     public ResponseEntity<User> createSupervisor(@Valid @RequestBody SupervisorForm user) {
         user.setPassword(encoder.encode(user.getPassword()));
 
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
+    }
+
+    @PostMapping("/buyer")
+    public ResponseEntity<User> createBuyer(@Valid @RequestBody BuyerForm user) {
+        user.setPassword(encoder.encode(user.getPassword()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 
