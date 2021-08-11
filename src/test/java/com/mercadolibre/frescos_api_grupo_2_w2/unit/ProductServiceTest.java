@@ -21,8 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,22 +38,6 @@ public class ProductServiceTest {
     @BeforeEach
     public void setUp() throws Exception {
         productService = new ProductService(productRepository, sellerService);
-    }
-
-    @Test
-    void createProductTest () {
-        ProductForm productForm = new ProductForm();
-        productForm.setName("any_name");
-        productForm.setType(ProductTypeEnum.CARNES);
-        productForm.setSellerId(1L);
-
-        given(sellerService.findSeller(1L)).willReturn(UserSellerMock.validSeller(Optional.of(1L)));
-
-        //Seller foundSeller = sellerService.findSeller(1L);
-
-        ProductResponse product = productService.createProduct(productForm);
-
-        assertEquals("any_name", product.getName());
     }
 
     @Test
@@ -87,22 +69,23 @@ public class ProductServiceTest {
         assertEquals("Product not found with this id", exception.getMessage());
 
     }
+    /*
+     @Test
+    void createProductTest () {
+        ProductForm productForm = new ProductForm();
+        productForm.setName("any_name");
+        productForm.setType(ProductTypeEnum.CARNES);
+        productForm.setSellerId(1L);
 
-     /*@Test
-    @DisplayName("should throws if id not belong to any Section")
-    public void findProductByIdTestException () throws Exception{
-        UUID uuid = UUID.randomUUID();
-        Product product = new Product();
-        product.setName("any_name");
-        product.setType(ProductTypeEnum.CARNES);
-        product.setProductId(uuid);
-        given(productRepository.findById(uuid)).willReturn(java.util.Optional.of(product));
-        assertThatThrownBy(() -> sectionService.findSectionById(sectionId))
-                .isInstanceOf(ApiException.class);
-        //Product productTest = productService.findProductById(uuid);
-        System.out.println(exception.getMessage());
-        assertEquals("Product not found", exception.getMessage());
-    }*/
+        given(sellerService.findSeller(1L)).willReturn(UserSellerMock.validSeller(Optional.of(1L)));
+
+        //Seller foundSeller = sellerService.findSeller(1L);
+
+        ProductResponse product = productService.createProduct(productForm);
+
+        assertEquals("any_name", product.getName());
+    }
+     */
 
 
 }
