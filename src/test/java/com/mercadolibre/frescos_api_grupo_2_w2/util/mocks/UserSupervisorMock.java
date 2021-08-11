@@ -2,6 +2,7 @@ package com.mercadolibre.frescos_api_grupo_2_w2.util.mocks;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SupervisorForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Optional;
@@ -12,10 +13,20 @@ public class UserSupervisorMock {
         supervisorMock.setEmail("any_email@email.com");
         supervisorMock.setPassword("any_password");
         supervisorMock.setRole("SUPERVISOR");
+        supervisorMock.setWarehouse(null);
 
         if (id != null) {
             supervisorMock.setUserId(id.get());
         }
+        return supervisorMock;
+    }
+
+    public static Supervisor validSupervisor () {
+        Supervisor supervisorMock = new Supervisor();
+        supervisorMock.setEmail("any_email@email.com");
+        supervisorMock.setPassword("any_password");
+        supervisorMock.setRole("SUPERVISOR");
+        supervisorMock.setUserId(1L);
         return supervisorMock;
     }
 

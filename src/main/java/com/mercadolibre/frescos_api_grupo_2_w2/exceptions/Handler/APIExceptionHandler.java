@@ -3,6 +3,7 @@ package com.mercadolibre.frescos_api_grupo_2_w2.exceptions.Handler;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.ExceptionDTO;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.InternalServerErrorException;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -42,6 +43,11 @@ public class APIExceptionHandler {
 
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ExceptionDTO> defaultHandler(InternalServerErrorException e){
+        return ResponseEntity.badRequest().body(new ExceptionDTO(e.getMessage()));
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ExceptionDTO> defaultHandler(ProductNotFoundException e){
         return ResponseEntity.badRequest().body(new ExceptionDTO(e.getMessage()));
     }
 

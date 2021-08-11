@@ -6,6 +6,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.UserService;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +26,8 @@ import java.util.*;
 public class JWTAutenticateFilter extends UsernamePasswordAuthenticationFilter {
 
     public static final int TOKEN_EXPIRATION = 86_400_000;
-    public static final String TOKEN_PASSWORD = System.getenv("TOKEN_PASSWORD");
+    //public static final String TOKEN_PASSWORD = System.getenv("TOKEN_PASSWORD");
+    public static final String TOKEN_PASSWORD = "463408a1-54c9-4307-bb1c-6cced559f5a7";
 
     private UserService userService;
 

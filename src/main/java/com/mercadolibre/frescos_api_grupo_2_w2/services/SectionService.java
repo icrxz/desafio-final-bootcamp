@@ -47,7 +47,8 @@ public class SectionService {
                 .productType(sectionForm.getProductType())
                 .build();
 
-        return SectionMapper.entityToResponse(sectionRepository.save(newSection));
+        Section section = sectionRepository.save(newSection);
+        return SectionMapper.entityToResponse(section);
     }
 
     public Long getSectionCurrentSize(UUID sectionId) {
