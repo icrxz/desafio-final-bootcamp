@@ -5,7 +5,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.ProductMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
-import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class ProductService {
         Product foundProduct = productRepository.findById(productId).orElse(null);
 
         if (foundProduct == null) {
-            throw new ApiException("404", "Product not found with this id", 404);
+            throw new ProductNotFoundException("Product not found with this id");
         }
 
         return foundProduct;
