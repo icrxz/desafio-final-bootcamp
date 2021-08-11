@@ -29,6 +29,6 @@ public class InboundOrderServiceTest {
     @BeforeEach
     public void setUp() throws Exception {
         inboundOrderRepository.deleteAll();
-        InboundOrderService inboundOrderService = new InboundOrderService(inboundOrderRepository, batchService, warehouseService, sectionService);
+        InboundOrderService inboundOrderService = new InboundOrderService(inboundOrderRepository, batchService, sectionService);
     }
 }

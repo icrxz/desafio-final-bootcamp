@@ -51,7 +51,7 @@ public class SectionServiceTest {
         Section section = new Section();
         section.setSectionId(sectionId);
         section.setMaxCapacity(100);
-        section.setProductType(ProductTypeEnum.CARNES);
+        section.setProductType(ProductTypeEnum.FRESH);
 
         given(this.sectionRepository.findById(sectionId)).willReturn(Optional.of(section));
 
@@ -83,7 +83,7 @@ public class SectionServiceTest {
         SectionForm sectionForm = new SectionForm();
         sectionForm.setMaxCapacity(100);
         sectionForm.setWarehouseId(warehouse.getWarehouseId().toString());
-        sectionForm.setProductType(ProductTypeEnum.CARNES);
+        sectionForm.setProductType(ProductTypeEnum.FRESH);
 
         UUID sectionId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
         Section sectionResponse = new Section();
@@ -97,7 +97,7 @@ public class SectionServiceTest {
                 .productType(sectionForm.getProductType())
                 .build();
 
-        sectionResponse.setProductType(ProductTypeEnum.CARNES);
+        sectionResponse.setProductType(ProductTypeEnum.FRESH);
 
         given(this.warehouseService.findWarehouseById(warehouse.getWarehouseId())).willReturn(warehouse);
         given(this.sectionRepository.save(newSection)).willReturn(sectionResponse);
@@ -108,7 +108,7 @@ public class SectionServiceTest {
         assertThat(createdSection.getSectionId()).isEqualTo(sectionId);
         assertThat(createdSection.getMaxCapacity()).isEqualTo(100);
         assertThat(createdSection.getWarehouseId()).isEqualTo(warehouse.getWarehouseId());
-        assertThat(createdSection.getType()).isEqualTo(ProductTypeEnum.CARNES);
+        assertThat(createdSection.getType()).isEqualTo(ProductTypeEnum.FRESH);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class SectionServiceTest {
         Section section = new Section();
         section.setSectionId(sectionId);
         section.setMaxCapacity(100);
-        section.setProductType(ProductTypeEnum.CARNES);
+        section.setProductType(ProductTypeEnum.FRESH);
         section.setWarehouse(WarehouseMock.validWarehouse());
         section.setOrders(new ArrayList<>());
 

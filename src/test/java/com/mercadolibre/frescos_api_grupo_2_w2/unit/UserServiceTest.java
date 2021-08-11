@@ -1,6 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.UserForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.UserForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;

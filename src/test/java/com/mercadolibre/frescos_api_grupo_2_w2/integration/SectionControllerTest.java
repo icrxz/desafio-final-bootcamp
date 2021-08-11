@@ -106,7 +106,7 @@ public class SectionControllerTest extends ControllerTest {
         SectionForm sectionForm = new SectionForm();
         sectionForm.setMaxCapacity(100);
         sectionForm.setWarehouseId(warehouse.getWarehouseId().toString());
-        sectionForm.setProductType(ProductTypeEnum.CARNES);
+        sectionForm.setProductType(ProductTypeEnum.FRESH);
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);

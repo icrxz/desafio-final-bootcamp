@@ -10,7 +10,7 @@ public class ProductMock {
 
         Product product = new Product();
         product.setName("any_name");
-        product.setType(ProductTypeEnum.CARNES);
+        product.setType(ProductTypeEnum.FRESH);
         product.setProductId(productId);
 
         return product;
