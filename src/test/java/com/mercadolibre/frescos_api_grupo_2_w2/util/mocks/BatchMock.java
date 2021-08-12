@@ -12,19 +12,20 @@ public class BatchMock {
 
     public static BatchForm validBatchForm () {
         BatchForm batch = new BatchForm();
-        batch.setCurrentQuantity(100);
+        batch.setCurrentQuantity(1);
         batch.setCurrentTemperature(100F);
         batch.setDueDate(LocalDate.now());
         batch.setManufacturingDate(LocalDate.now());
-        batch.setInitialQuantity(100);
+        batch.setInitialQuantity(1);
         batch.setMinimumTemperature(100F);
-        batch.setProductId("any_code");
+        batch.setProductId(ProductMock.productID.toString());
         return batch;
     }
 
     public static Batch validBatch () {
         Batch createdBatch = new Batch();
-        createdBatch.setCurrentQuantity(100);
+        createdBatch.setBatchId(1);
+        createdBatch.setCurrentQuantity(1);
         createdBatch.setCurrentTemperature(100F);
         createdBatch.setDueDate(LocalDate.now());
         createdBatch.setManufacturingDate(LocalDate.now());

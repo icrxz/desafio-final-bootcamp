@@ -6,6 +6,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.InboundOrderRespon
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.InboundOrderRepository;
+import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SupervisorRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.*;
 import org.junit.jupiter.api.BeforeEach;
