@@ -8,6 +8,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SectionRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.SectionService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.WarehouseService;
+import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.SectionMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.WarehouseMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -53,13 +54,13 @@ public class SectionServiceTest {
         section.setMaxCapacity(100);
         section.setProductType(ProductTypeEnum.FRESH);
 
-        given(this.sectionRepository.findById(sectionId)).willReturn(Optional.of(section));
+        given(this.sectionRepository.findById(SectionMock.sectionId)).willReturn(Optional.of(SectionMock.validSection()));
 
         // act
-        Section findSection = this.sectionService.findSectionById(sectionId);
+        Section findSection = this.sectionService.findSectionById(SectionMock.sectionId);
 
         // assert
-        assertThat(findSection.getSectionId()).isEqualTo(sectionId);
+        assertThat(findSection.getSectionId()).isEqualTo(SectionMock.sectionId);
     }
 
     @Test
@@ -75,7 +76,6 @@ public class SectionServiceTest {
     @Test
     @DisplayName("should return a Section if createSection succeeds")
     void createSection_succeeds() {
-
         //arrange
         Warehouse warehouse = WarehouseMock.validWarehouse();
 
@@ -100,12 +100,12 @@ public class SectionServiceTest {
         sectionResponse.setProductType(ProductTypeEnum.FRESH);
 
         given(this.warehouseService.findWarehouseById(warehouse.getWarehouseId())).willReturn(warehouse);
-        given(this.sectionRepository.save(newSection)).willReturn(sectionResponse);
+        given(this.sectionRepository.save(newSection)).willReturn(SectionMock.validSection());
 
         SectionResponse createdSection = this.sectionService.createSection(sectionForm);
 
         // assert
-        assertThat(createdSection.getSectionId()).isEqualTo(sectionId);
+        assertThat(createdSection.getSectionId()).isEqualTo(SectionMock.sectionId);
         assertThat(createdSection.getMaxCapacity()).isEqualTo(100);
         assertThat(createdSection.getWarehouseId()).isEqualTo(warehouse.getWarehouseId());
         assertThat(createdSection.getType()).isEqualTo(ProductTypeEnum.FRESH);

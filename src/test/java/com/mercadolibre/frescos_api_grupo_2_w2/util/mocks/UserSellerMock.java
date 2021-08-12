@@ -3,6 +3,8 @@ package com.mercadolibre.frescos_api_grupo_2_w2.util.mocks;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SellerForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import org.springframework.beans.BeanUtils;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class UserSellerMock {
@@ -12,6 +14,7 @@ public class UserSellerMock {
         sellerMock.setPassword("any_password");
         sellerMock.setCnpj("any_cnpj");
         sellerMock.setRole("SELLER");
+        sellerMock.setProducts(new ArrayList<>());
 
         if (id != null) {
             sellerMock.setUserId(id.get());

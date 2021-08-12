@@ -44,9 +44,11 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
-                .antMatchers(HttpMethod.GET, "/fake").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/seller").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/buyer").permitAll();
+                .antMatchers(HttpMethod.GET, "/fake").permitAll()
+                .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll();
+
 
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
