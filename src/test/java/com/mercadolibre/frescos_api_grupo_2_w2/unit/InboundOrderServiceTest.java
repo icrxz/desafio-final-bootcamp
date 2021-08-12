@@ -1,7 +1,7 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrderForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrder.InboundOrderForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.InboundOrderResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
@@ -46,7 +46,7 @@ public class InboundOrderServiceTest {
     @BeforeEach
     public void setUp() throws Exception {
         inboundOrderRepository.deleteAll();
-        inboundOrderService = new InboundOrderService(inboundOrderRepository, batchService, warehouseService, sectionService);
+        inboundOrderService = new InboundOrderService(inboundOrderRepository, batchService, sectionService);
     }
 
     @Test

@@ -83,7 +83,7 @@ public class BatchServiceTest {
     void createBatch_SectionAndProductsDifferentTypes () {
         //arrange
         Product product = ProductMock.validProduct();
-        product.setType(ProductTypeEnum.EMBUTIDOS);
+        product.setType(ProductTypeEnum.REFRIGERATED);
         given(productService.findProductById(ProductMock.productID)).willReturn(product);
         given(sectionService.getSectionCurrentSize(any())).willReturn(100L);
 

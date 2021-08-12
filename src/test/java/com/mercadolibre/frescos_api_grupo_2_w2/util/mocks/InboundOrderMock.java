@@ -1,6 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.util.mocks;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrderForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrder.InboundOrderForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 
 import java.time.LocalDate;
