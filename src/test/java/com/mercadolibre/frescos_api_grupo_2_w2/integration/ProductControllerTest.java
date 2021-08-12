@@ -69,7 +69,7 @@ public class ProductControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("should return 201 if createProduct succeeds")
-    void createSection_suceeds() throws Exception {
+    void createProduct_suceeds() throws Exception {
         token = this.loginSeller();
         // arrange
        Seller sellerMock = this.userRepository.save(UserSellerMock.validSeller(Optional.of(1L)));

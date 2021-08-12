@@ -25,7 +25,6 @@ public class WarehouseController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('SUPERVISOR')")
     public ResponseEntity createWarehouse(@RequestBody @Valid WarehouseForm warehouseForm) {
         WarehouseResponse newWarehouse = warehouseService.createWarehouse(warehouseForm);
 
@@ -33,10 +32,9 @@ public class WarehouseController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('SUPERVISOR')")
     public ResponseEntity getAllWarehouses() {
         List<WarehouseResponse> warehouses = WarehouseMapper.entityListToResponseList(warehouseService.getWarehouses());
 
-        return new ResponseEntity(warehouses, HttpStatus.CREATED);
+        return new ResponseEntity(warehouses, HttpStatus.OK);
     }
 }
