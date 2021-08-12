@@ -3,32 +3,16 @@ package com.mercadolibre.frescos_api_grupo_2_w2.integration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrderForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrderSectionForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SectionForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.payloads.LoginPayload;
-import net.bytebuddy.implementation.bind.annotation.Super;
-import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InboundOrderControllerTest extends ControllerTest{
 

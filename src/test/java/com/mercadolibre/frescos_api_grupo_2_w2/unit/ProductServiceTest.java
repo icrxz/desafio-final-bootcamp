@@ -82,7 +82,7 @@ public class ProductServiceTest {
 
          ProductForm productForm = new ProductForm();
          productForm.setName("any_name");
-         productForm.setType(ProductTypeEnum.CARNES);
+         productForm.setType(ProductTypeEnum.FRESH);
          productForm.setSellerId(sellerMock.getUserId());
 
          Product product = Product.builder()
@@ -97,7 +97,7 @@ public class ProductServiceTest {
          ProductResponse createProduct = this.productService.createProduct(productForm);
          // assert
          assertThat(createProduct.getName()).isEqualTo("any_name");
-         assertThat(createProduct.getType()).isEqualTo(ProductTypeEnum.CARNES);
+         assertThat(createProduct.getType()).isEqualTo(ProductTypeEnum.FRESH);
          assertThat(createProduct.getSellerId()).isEqualTo(1L);
     }
 
