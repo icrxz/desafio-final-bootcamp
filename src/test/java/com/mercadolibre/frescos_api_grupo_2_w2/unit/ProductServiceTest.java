@@ -53,7 +53,6 @@ public class ProductServiceTest {
         Product productTest = productService.findProductById(productId);
 
         assertEquals(productId, productTest.getProductId());
-
     }
 
     @Test
