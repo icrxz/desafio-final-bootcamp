@@ -13,7 +13,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication()
 public class Application {
+	private final UserService userService;
 
+	@Autowired
+	public Application(UserService userService) {
+		this.userService = userService;
+
+		if (userService.getUsers().size() <= 0)
+			createAdminUser();
+	}
+
+	private void createAdminUser() {
+		SupervisorForm supervisor = new SupervisorForm();
+		supervisor.setEmail("admin@admin.com");
+		supervisor.setPassword("$2a$10$JHzsz1ZmVNNYtxiiaSlyl.M8rwfyPPfePg4FRUkPmKMM4T3c2/cFi");
+
+		userService.createUser(supervisor);
+	}
 	public static void main(String[] args) {
 		ScopeUtils.calculateScopeSuffix();
 		new SpringApplicationBuilder(SpringConfig.class).registerShutdownHook(true).run(args);
