@@ -22,15 +22,9 @@ public class InboundOrderController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('SUPERVISOR','SELLER')")
     public ResponseEntity createInboundOrder(@RequestBody @Valid InboundOrderForm inboundOrderForm) {
         InboundOrderResponse newInboundOrder = inboundOrderService.createInboundOrder(inboundOrderForm);
 
         return new ResponseEntity(newInboundOrder, HttpStatus.CREATED);
     }
-
-//    @PutMapping
-//    public ResponseEntity updateInboundOrder(@RequestBody @Valid InboundOrderDTO inboundOrderDTO) {
-//
-//    }
 }

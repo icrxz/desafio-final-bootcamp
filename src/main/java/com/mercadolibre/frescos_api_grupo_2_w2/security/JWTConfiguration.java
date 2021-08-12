@@ -35,12 +35,20 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/supervisor").hasAuthority("SUPERVISOR")
-                .antMatchers(HttpMethod.POST, "/api/v1/sections").hasAuthority("SUPERVISOR");;
+                .antMatchers(HttpMethod.GET, "/api/v1/user").hasAuthority("SUPERVISOR")
+                .antMatchers(HttpMethod.POST, "/api/v1/fresh-products/inboundorder").hasAnyAuthority("SUPERVISOR", "SELLER")
+//                .antMatchers("/api/v1/fresh-products/orders").hasAuthority("BUYER")
+                .antMatchers(HttpMethod.POST, "/api/v1/fresh-products").hasAnyAuthority("SUPERVISOR", "SELLER")
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products").hasAnyAuthority("SUPERVISOR", "BUYER")
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/list").hasAnyAuthority("SUPERVISOR", "BUYER")
+                .antMatchers(HttpMethod.POST, "/api/v1/sections").hasAuthority("SUPERVISOR")
+                .antMatchers("/api/v1/warehouses").hasAuthority("SUPERVISOR");
 
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/seller").permitAll()
-                .antMatchers(HttpMethod.GET, "/fake").permitAll();
+                .antMatchers(HttpMethod.GET, "/fake").permitAll()
+                .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll();
 
 
         http.csrf().disable().authorizeRequests()

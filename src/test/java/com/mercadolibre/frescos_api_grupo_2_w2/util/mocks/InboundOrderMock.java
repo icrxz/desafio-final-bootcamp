@@ -13,6 +13,7 @@ public class InboundOrderMock {
         form.setSection(SectionMock.validInboundOrderSectionForm());
         form.setOrderDate(LocalDate.now());
         form.setOrderNumber(1L);
+        form.setBatchStock(Arrays.asList(BatchMock.validBatchForm()));
         return form;
     }
 
