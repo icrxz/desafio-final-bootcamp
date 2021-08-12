@@ -15,7 +15,7 @@ public class ProductMock {
         product.setProductId(productID);
         product.setName("any_name");
         product.setSeller(UserSellerMock.validSeller(Optional.of(1L)));
-        product.setType(ProductTypeEnum.CARNES);
+        product.setType(ProductTypeEnum.FRESH);
         return product;
     }
 }

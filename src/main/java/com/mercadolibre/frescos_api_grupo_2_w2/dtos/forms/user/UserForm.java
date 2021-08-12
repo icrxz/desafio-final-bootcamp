@@ -1,4 +1,4 @@
-package com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms;
+package com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

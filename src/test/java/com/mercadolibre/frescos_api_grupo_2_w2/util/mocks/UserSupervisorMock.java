@@ -1,6 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.util.mocks;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SupervisorForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SupervisorForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
 import org.springframework.beans.BeanUtils;

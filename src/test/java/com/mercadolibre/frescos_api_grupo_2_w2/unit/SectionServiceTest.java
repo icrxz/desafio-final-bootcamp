@@ -47,6 +47,12 @@ public class SectionServiceTest {
     @Test
     @DisplayName("should return a Section if findSectonBy succeeds")
     void findSectionById_succeeds() {
+        //arrange
+        UUID sectionId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
+        Section section = new Section();
+        section.setSectionId(sectionId);
+        section.setMaxCapacity(100);
+        section.setProductType(ProductTypeEnum.FRESH);
 
         given(this.sectionRepository.findById(SectionMock.sectionId)).willReturn(Optional.of(SectionMock.validSection()));
 
@@ -72,13 +78,26 @@ public class SectionServiceTest {
     void createSection_succeeds() {
         //arrange
         Warehouse warehouse = WarehouseMock.validWarehouse();
-        SectionForm sectionForm = SectionMock.validSectionForm();
+
+        //mock Section
+        SectionForm sectionForm = new SectionForm();
+        sectionForm.setMaxCapacity(100);
+        sectionForm.setWarehouseId(warehouse.getWarehouseId().toString());
+        sectionForm.setProductType(ProductTypeEnum.FRESH);
+
+        UUID sectionId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
+        Section sectionResponse = new Section();
+        sectionResponse.setSectionId(sectionId);
+        sectionResponse.setWarehouse(warehouse);
+        sectionResponse.setMaxCapacity(100);
 
         Section newSection = Section.builder()
                 .warehouse(warehouse)
                 .maxCapacity(sectionForm.getMaxCapacity())
                 .productType(sectionForm.getProductType())
                 .build();
+
+        sectionResponse.setProductType(ProductTypeEnum.FRESH);
 
         given(this.warehouseService.findWarehouseById(warehouse.getWarehouseId())).willReturn(warehouse);
         given(this.sectionRepository.save(newSection)).willReturn(SectionMock.validSection());
@@ -89,7 +108,7 @@ public class SectionServiceTest {
         assertThat(createdSection.getSectionId()).isEqualTo(SectionMock.sectionId);
         assertThat(createdSection.getMaxCapacity()).isEqualTo(100);
         assertThat(createdSection.getWarehouseId()).isEqualTo(warehouse.getWarehouseId());
-        assertThat(createdSection.getType()).isEqualTo(ProductTypeEnum.CARNES);
+        assertThat(createdSection.getType()).isEqualTo(ProductTypeEnum.FRESH);
     }
 
     @Test
@@ -106,7 +125,14 @@ public class SectionServiceTest {
     void getSectionCurrentSize_succeeds() {
         UUID sectionId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");
 
-        given(this.sectionRepository.findById(sectionId)).willReturn(Optional.of(SectionMock.validSection()));
+        Section section = new Section();
+        section.setSectionId(sectionId);
+        section.setMaxCapacity(100);
+        section.setProductType(ProductTypeEnum.FRESH);
+        section.setWarehouse(WarehouseMock.validWarehouse());
+        section.setOrders(new ArrayList<>());
+
+        given(this.sectionRepository.findById(sectionId)).willReturn(Optional.of(section));
         Long sectionCurrentSize = this.sectionService.getSectionCurrentSize(sectionId);
         assertThat(sectionCurrentSize).isEqualTo(100);
     }

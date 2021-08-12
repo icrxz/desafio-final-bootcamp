@@ -1,7 +1,7 @@
 package com.mercadolibre.frescos_api_grupo_2_w2;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.config.SpringConfig;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SupervisorForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SupervisorForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.UserService;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.ScopeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,6 @@ public class Application {
 
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		return encoder;
+		return new BCryptPasswordEncoder();
 	}
 }

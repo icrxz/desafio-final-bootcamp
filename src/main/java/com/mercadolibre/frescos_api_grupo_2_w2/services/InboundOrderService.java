@@ -1,7 +1,7 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrderForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrder.InboundOrderForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.InboundOrderMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.InboundOrderResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
@@ -17,19 +17,16 @@ import java.util.UUID;
 public class InboundOrderService {
     private final InboundOrderRepository inboundOrderRepository;
     private final BatchService batchService;
-    private final WarehouseService warehouseService;
     private final SectionService sectionService;
 
     @Autowired
     public InboundOrderService(
             InboundOrderRepository inboundOrderRepository,
             BatchService batchService,
-            WarehouseService warehouseService,
             SectionService sectionService
     ) {
         this.inboundOrderRepository = inboundOrderRepository;
         this.batchService = batchService;
-        this.warehouseService = warehouseService;
         this.sectionService = sectionService;
     }
 

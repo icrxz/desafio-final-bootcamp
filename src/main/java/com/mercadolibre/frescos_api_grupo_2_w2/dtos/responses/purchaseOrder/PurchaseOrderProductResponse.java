@@ -1,6 +1,5 @@
-package com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses;
+package com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.purchaseOrder;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,10 +12,9 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductResponse {
+public class PurchaseOrderProductResponse {
     private UUID productId;
     private String name;
-    private ProductTypeEnum type;
     private BigDecimal value;
-    private long sellerId;
+    private long quantity;
 }
