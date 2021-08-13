@@ -2,10 +2,12 @@ package com.mercadolibre.frescos_api_grupo_2_w2.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.BuyerForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SellerForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
+import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserBuyerMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSellerMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSupervisorMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.payloads.LoginPayload;
@@ -15,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -69,7 +70,30 @@ class UserControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("should return 403 if a unauthorized token are provied")
+    @DisplayName("should create a userBuyer")
+    void createUser_userBuyerSucceeds() throws Exception {
+        BuyerForm buyer = UserBuyerMock.validBuyerForm();
+        buyer.setEmail("new_user_buyer@email.com");
+
+        HttpEntity<BuyerForm> request = new HttpEntity<>(buyer);
+
+        ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/user/buyer", request, String.class);
+
+        //Verify request succeed
+        assertEquals(201, result.getStatusCodeValue());
+    }
+
+    @Test
+    @DisplayName("should return 400 if a invalid payload are provided")
+    void createUser_userBuyerInvalidPayload() throws Exception {
+        HttpEntity<BuyerForm> request = new HttpEntity<>(new BuyerForm());
+
+        ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/user/buyer", request, String.class);
+        assertEquals(400, result.getStatusCodeValue());
+    }
+
+    @Test
+    @DisplayName("should return 403 if a unauthorized token are provide")
     void createUser_userSupervisorNotAuthorized() throws Exception {
         SellerForm seller = UserSellerMock.validSellerForm();
         seller.setEmail("new_user_supervisor@email.com");
