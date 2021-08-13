@@ -3,16 +3,20 @@ package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.ProductForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.ProductRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.ProductService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.SellerService;
+import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.BatchMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.ProductMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSellerMock;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +28,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -100,5 +106,70 @@ public class ProductServiceTest {
          assertThat(createProduct.getSellerId()).isEqualTo(1L);
     }
 
+    @Test
+    @DisplayName("should return all products created in repository")
+    void getProducts_succeeds() {
+        Product product1 = ProductMock.validProduct(UUID.randomUUID());
+        Product product2 = ProductMock.validProduct(UUID.randomUUID());
 
+        given(productRepository.findAll()).willReturn(Arrays.asList(product1, product2));
+
+        List<ProductResponse> products = this.productService.getAllProducts();
+
+        assertEquals(products.size(), 2);
+        assertEquals(products.get(0).getProductId(), product1.getProductId());
+        assertEquals(products.get(1).getProductId(), product2.getProductId());
+    }
+
+    @Test
+    @DisplayName("should throws ApiException if has no products created")
+    void getProducts_failsWithNoProducts() {
+        given(productRepository.findAll()).willReturn(Arrays.asList());
+
+        assertThatThrownBy(() -> productService.getAllProducts())
+                .isInstanceOf(ApiException.class)
+                .hasMessage("Product list not found");
+    }
+
+    @Test
+    @DisplayName("should return products of only a category")
+    void getProductsByType_succeeds() {
+        Product product1 = ProductMock.validProduct(UUID.randomUUID());
+        Product product2 = ProductMock.validProduct(UUID.randomUUID());
+        product1.setType(ProductTypeEnum.FRESH);
+        product2.setType(ProductTypeEnum.REFRIGERATED);
+
+        given(productRepository.findProductByType(ProductTypeEnum.REFRIGERATED)).willReturn(Arrays.asList(product2));
+
+        List<ProductResponse> products = this.productService.getProductsByType(ProductTypeEnum.REFRIGERATED);
+
+        assertEquals(1, products.size());
+        assertEquals(product2.getProductId(), products.get(0).getProductId());
+    }
+
+    @Test
+    @DisplayName("should throws ApiException if not find products of a category")
+    void getProductsByType_failsWithNoProducts() {
+        given(productRepository.findProductByType(ProductTypeEnum.FRESH)).willReturn(Arrays.asList());
+
+        assertThatThrownBy(() -> productService.getProductsByType(ProductTypeEnum.FRESH))
+                .isInstanceOf(ApiException.class)
+                .hasMessage("Product list not found");
+    }
+
+    @Test
+    @DisplayName("should return the quantity of products created in the batches")
+    void getProductsQuantity_succeeds() {
+        Product product = ProductMock.validProduct(null);
+        Batch batch1 = BatchMock.validBatch(product);
+        Batch batch2 = BatchMock.validBatch(product);
+
+        product.setBatches(Arrays.asList(batch1, batch2));
+
+        given(productRepository.findById(product.getProductId())).willReturn(Optional.of(product));
+
+        Long productCount = productService.getProductQuantity(product.getProductId());
+
+        assertEquals(20, productCount);
+    }
 }
