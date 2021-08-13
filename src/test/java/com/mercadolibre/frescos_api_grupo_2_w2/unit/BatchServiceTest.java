@@ -1,16 +1,17 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderBatch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
-import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.BatchRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.BatchService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.ProductService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.SectionService;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.BatchMock;
+import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.InboundOrderMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.ProductMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.SectionMock;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +64,7 @@ public class BatchServiceTest {
         given(sectionService.getSectionCurrentSize(any())).willReturn(100L);
 
         //act
-        Batch response = batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection());
+        Batch response = batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection(), InboundOrderMock.validInboundOrder());
 
         //assert
         assertThat(response.getBatchId()).isEqualTo(BatchMock.validBatch(null).getBatchId());
@@ -78,7 +79,7 @@ public class BatchServiceTest {
         given(sectionService.getSectionCurrentSize(any())).willReturn(0L);
 
         //act
-        assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection()))
+        assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection(), InboundOrderMock.validInboundOrder()))
                 .isInstanceOf(ApiException.class);
     }
 
@@ -92,7 +93,7 @@ public class BatchServiceTest {
         given(sectionService.getSectionCurrentSize(any())).willReturn(100L);
 
         //act
-        assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection()))
+        assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection(), InboundOrderMock.validInboundOrder()))
                 .isInstanceOf(ApiException.class);
     }
 

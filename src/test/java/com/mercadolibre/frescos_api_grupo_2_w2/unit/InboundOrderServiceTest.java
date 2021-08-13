@@ -64,7 +64,7 @@ public class InboundOrderServiceTest {
                 .build();
 
         given(sectionService.findSectionById(SectionMock.sectionId)).willReturn(createdSection);
-        given(batchService.createBatch(batch, createdSection)).willReturn(createdBatch);
+        given(batchService.createBatch(any(), any(), any())).willReturn(createdBatch);
         given(inboundOrderRepository.save(any())).willReturn(newInboundOrder);
 
         InboundOrderResponse response = this.inboundOrderService.createInboundOrder(form);
