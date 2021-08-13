@@ -28,5 +28,6 @@ public class InboundOrder {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "inboundOrder")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Builder.Default
     private List<Batch> batchStock = new ArrayList<>();
 }
