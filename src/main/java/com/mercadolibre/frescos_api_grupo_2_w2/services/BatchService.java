@@ -94,7 +94,6 @@ public class BatchService {
         List<Batch> batchList = new ArrayList<>();
         if (orderBatch == OrderBatch.C) {
            batchList = batchRepository.findBatchesByProduct_productIdOrderByCurrentQuantityAsc(productId);
-
         } else if (orderBatch == OrderBatch.F) {
             batchList = batchRepository.findBatchesByProduct_productIdOrderByDueDateAsc(productId);
         } else {
