@@ -1,6 +1,8 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchCompleteResponse;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchListResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 
@@ -43,5 +45,17 @@ public abstract class BatchMapper {
 
     public static List<BatchResponse> batchFormListToListResponse(List<BatchForm> batches) {
         return batches.stream().map(batch -> batchFormToResponse(batch)).collect(Collectors.toList());
+    }
+
+    public static BatchListResponse batchListEntityToResponse(Batch batch) {
+        return new BatchListResponse(
+                batch.getNumber(),
+                batch.getCurrentQuantity(),
+                batch.getDueDate()
+        );
+    }
+
+    public static List<BatchListResponse> batchRolToListResponse(List<Batch> batches) {
+        return batches.stream().map(batch -> batchListEntityToResponse(batch)).collect(Collectors.toList());
     }
 }

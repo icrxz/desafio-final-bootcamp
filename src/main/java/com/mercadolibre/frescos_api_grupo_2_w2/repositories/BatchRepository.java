@@ -10,7 +10,12 @@ import java.util.UUID;
 
 @Repository
 public interface BatchRepository extends JpaRepository<Batch, Long> {
+
     List<Batch> findBatchesByProduct(Product product);
 
-    List<Batch> findBatchesByProduct_productId(UUID productId);
+    List<Batch> findBatchesByProduct_productId (UUID productId);
+
+    List<Batch> findBatchesByProduct_productIdOrderByCurrentQuantityAsc (UUID productId);
+
+    List<Batch> findBatchesByProduct_productIdOrderByDueDateAsc (UUID productId);
 }
