@@ -1,13 +1,11 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.ProductMapper;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Section;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderBatch;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.BatchRepository;
@@ -41,7 +39,7 @@ public class BatchService {
         }
     }
 
-    public Batch createBatch(BatchForm batchForm, Section section) {
+    public Batch createBatch(BatchForm batchForm, Section section, InboundOrder inboundOrder) {
         Product foundProduct = productService.findProductById(UUID.fromString(batchForm.getProductId()));
 
         Batch batch = Batch.builder()
@@ -53,6 +51,7 @@ public class BatchService {
                 .manufacturingTime(batchForm.getManufacturingTime())
                 .minimumTemperature(batchForm.getMinimumTemperature())
                 .number(batchForm.getBatchNumber())
+                .inboundOrder(inboundOrder)
                 .product(foundProduct)
                 .build();
 
@@ -71,24 +70,6 @@ public class BatchService {
         return batchList;
     }
 
-    /*public List<Batch> findBatchesByProductOrderCurrent(UUID productId) {
-        List<Batch> batchList = batchRepository.findBatchesByProduct_productIdOrderByCurrentQuantityAsc(productId);
-
-        if (productId == null) {
-            throw new ProductNotFoundException("Product not found in Batch");
-        }
-        return batchList;
-    }
-
-    public List<Batch> findBatchesByProductOrderDate(UUID productId) {
-        List<Batch> batchList = batchRepository.findBatchesByProduct_productIdOrderByDueDateAsc(productId);
-
-        if (productId == null) {
-            throw new ProductNotFoundException("Product not found in Batch");
-        }
-        return batchList;
-    }*/
-
     public List<Batch> findBatchesByProductOrder(UUID productId, OrderBatch orderBatch) {
 
         List<Batch> batchList = new ArrayList<>();
@@ -98,17 +79,10 @@ public class BatchService {
             batchList = batchRepository.findBatchesByProduct_productIdOrderByDueDateAsc(productId);
         } else {
             if (productId == null && orderBatch == null) {
-            throw new ProductNotFoundException("Product not found in Batch");
-        }
-
+               throw new ProductNotFoundException("Product not found in Batch");
+            }
         }
 
         return batchList;
-
     }
-
-
-
-
-
 }
