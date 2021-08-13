@@ -2,10 +2,10 @@ package com.mercadolibre.frescos_api_grupo_2_w2.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.CaseFormat;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrder.InboundOrderForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrder.InboundOrderSectionForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.InboundOrderResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.*;
@@ -113,10 +113,6 @@ public class InboundOrderControllerTest extends ControllerTest{
         product.setSeller(seller);
         product = this.productRepository.save(product);
 
-        Batch batch = BatchMock.validBatch(null);
-        batch.setProduct(product);
-        this.batchRepository.save(batch);
-
         InboundOrderForm form = new InboundOrderForm();
 
         BatchForm batchForm = new BatchForm();
@@ -149,9 +145,16 @@ public class InboundOrderControllerTest extends ControllerTest{
         headers.set("Authorization", token);
 
         HttpEntity<InboundOrderForm> request = new HttpEntity<>(form, headers);
-        ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/fresh-products/inboundorder", request, String.class);
+        ResponseEntity<InboundOrderResponse> result = this.testRestTemplate.postForEntity(
+                "/api/v1/fresh-products/inboundorder",
+                request,
+                InboundOrderResponse.class
+        );
 
         //Verify request succeed
         assertEquals(201, result.getStatusCodeValue());
+        assertEquals(0, result.getBody().getErrorMessages().size());
+        assertEquals(0, result.getBody().getFailedBatches().size());
+        assertEquals(1, result.getBody().getSuccessBatches().size());
     }
 }
