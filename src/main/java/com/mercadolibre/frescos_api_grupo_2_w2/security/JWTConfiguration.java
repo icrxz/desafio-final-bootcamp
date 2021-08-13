@@ -39,6 +39,8 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/v1/fresh-products").hasAnyAuthority("SUPERVISOR", "SELLER")
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products").hasAnyAuthority("SUPERVISOR", "BUYER")
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/list").hasAnyAuthority("SUPERVISOR", "BUYER")
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/batch/list").hasAnyAuthority("SUPERVISOR")
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/batch/list/order").hasAnyAuthority("SUPERVISOR")
                 .antMatchers(HttpMethod.POST, "/api/v1/sections").hasAuthority("SUPERVISOR")
                 .antMatchers("/api/v1/warehouses").hasAuthority("SUPERVISOR");
 
