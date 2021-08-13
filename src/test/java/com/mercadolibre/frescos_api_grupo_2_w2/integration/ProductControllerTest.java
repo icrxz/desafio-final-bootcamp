@@ -1,6 +1,5 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.integration;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.ProductForm;
@@ -23,8 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
-import java.util.Optional;
-import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProductControllerTest extends ControllerTest {
@@ -53,12 +50,12 @@ public class ProductControllerTest extends ControllerTest {
 
     private String loginSeller() throws JsonProcessingException {
         // insert user
-        Seller seller = UserSellerMock.validSeller(Optional.of(1L));
+        Seller seller = UserSellerMock.validSeller(1L);
         seller.setPassword(encoder.encode("any_password"));
         this.userRepository.save(seller);
 
         // payload
-        LoginPayload payload = new LoginPayload("any_email@email.com", "any_password");
+        LoginPayload payload = new LoginPayload(seller.getEmail(), "any_password");
         String jsonPayload = objectMapper.writeValueAsString(payload);
 
         ResponseEntity<String> responseEntity = this.testRestTemplate.postForEntity("/login", jsonPayload, String.class);
@@ -84,17 +81,17 @@ public class ProductControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("should return 201 if createProduct succeeds")
-    void createProduct_suceeds() throws Exception {
+    void createProduct_succeeds() throws Exception {
         token = this.loginSeller();
         // arrange
-       Seller sellerMock = this.userRepository.save(UserSellerMock.validSeller(Optional.of(1L)));
+        Seller sellerMock = this.userRepository.save(UserSellerMock.validSeller(3L));
 
-       //mock Product
-       ProductForm productForm = new ProductForm();
-       productForm.setName("any_name");
-       productForm.setType(ProductTypeEnum.FRESH);
-       productForm.setSellerId(sellerMock.getUserId());
-       productForm.setValue(new BigDecimal(100));
+        //mock Product
+        ProductForm productForm = new ProductForm();
+        productForm.setName("any_name");
+        productForm.setType(ProductTypeEnum.FRESH);
+        productForm.setSellerId(sellerMock.getUserId());
+        productForm.setValue(BigDecimal.valueOf(15.50));
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);

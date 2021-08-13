@@ -67,7 +67,6 @@ public class JWTValidateFilter extends BasicAuthenticationFilter {
                 .verify(token)
                 .getClaims();
 
-        listClaims.entrySet().stream().forEach(m -> System.out.println(m));
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         String string = listClaims.get("role").toString();
         if (string != null)

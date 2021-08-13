@@ -1,11 +1,8 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.util.mocks;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.WarehouseForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class WarehouseMock {

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SectionForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
@@ -22,8 +21,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -48,12 +45,12 @@ public class SectionControllerTest extends ControllerTest {
 
      private String loginSeller() throws JsonProcessingException {
         // insert user
-        Seller seller = UserSellerMock.validSeller(Optional.of(1L));
+        Seller seller = UserSellerMock.validSeller(1L);
         seller.setPassword(encoder.encode("any_password"));
         this.userRepository.save(seller);
 
         // payload
-        LoginPayload payload = new LoginPayload("any_email@email.com", "any_password");
+        LoginPayload payload = new LoginPayload(seller.getEmail(), "any_password");
         String jsonPayload = objectMapper.writeValueAsString(payload);
 
         ResponseEntity<String> responseEntity = this.testRestTemplate.postForEntity("/login", jsonPayload, String.class);
@@ -94,7 +91,7 @@ public class SectionControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("should return 201 if createSection succeeds")
-    void createSection_suceeds() throws Exception {
+    void createSection_succeeds() throws Exception {
         token = this.loginSupervisor();
         // arrange
         Supervisor user = this.userRepository.save(UserSupervisorMock.validSupervisor());

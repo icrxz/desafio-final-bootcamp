@@ -2,13 +2,10 @@ package com.mercadolibre.frescos_api_grupo_2_w2.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.ProductForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.WarehouseForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SupervisorRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.WarehouseRepository;
@@ -16,7 +13,6 @@ import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSellerMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSupervisorMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.WarehouseMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.payloads.LoginPayload;
-import net.bytebuddy.implementation.bind.annotation.Super;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,12 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WarehouseControllerTest extends ControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
@@ -56,12 +47,12 @@ public class WarehouseControllerTest extends ControllerTest {
 
     private String loginSeller() throws JsonProcessingException {
         // insert user
-        Seller seller = UserSellerMock.validSeller(Optional.of(1L));
+        Seller seller = UserSellerMock.validSeller(1L);
         seller.setPassword(encoder.encode("any_password"));
         this.userRepository.save(seller);
 
         // payload
-        LoginPayload payload = new LoginPayload("any_email@email.com", "any_password");
+        LoginPayload payload = new LoginPayload(seller.getEmail(), "any_password");
         String jsonPayload = objectMapper.writeValueAsString(payload);
 
         ResponseEntity<String> responseEntity = this.testRestTemplate.postForEntity("/login", jsonPayload, String.class);
