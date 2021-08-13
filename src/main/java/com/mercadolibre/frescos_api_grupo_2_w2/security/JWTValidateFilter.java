@@ -71,7 +71,6 @@ public class JWTValidateFilter extends BasicAuthenticationFilter {
         String string = listClaims.get("role").toString();
         if (string != null)
             authorities.add(new SimpleGrantedAuthority(string.replaceAll("^\"|\"$", "")));
-        authorities.add(new SimpleGrantedAuthority(string.replaceAll("^\"|\"$", "")));
 
         return new UsernamePasswordAuthenticationToken(user,null, authorities);
     }

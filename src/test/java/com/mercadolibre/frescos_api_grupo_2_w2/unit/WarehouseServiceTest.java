@@ -1,21 +1,13 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.WarehouseForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.WarehouseResponse;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.User;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
-import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.UserAlreadyExists;
-import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.WarehouseRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.SupervisorService;
-import com.mercadolibre.frescos_api_grupo_2_w2.services.UserService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.WarehouseService;
-import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSellerMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSupervisorMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.WarehouseMock;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +21,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -48,13 +40,14 @@ public class WarehouseServiceTest {
     @DisplayName("should return a Warehouse if findWarehouseById succeeds")
     void findWarehouseById_succeeds() {
         //arrange
-        given(warehouseRepository.findById(WarehouseMock.warehouseId)).willReturn(Optional.of(WarehouseMock.validWarehouse()));
+        Warehouse validWarehouse = WarehouseMock.validWarehouse();
+        given(warehouseRepository.findById(WarehouseMock.warehouseId)).willReturn(Optional.of(validWarehouse));
 
         // act
         Warehouse warehouse = this.warehouseService.findWarehouseById(WarehouseMock.warehouseId);
 
         // assert
-        assertThat(warehouse).isEqualTo(WarehouseMock.validWarehouse());
+        assertThat(warehouse).isEqualTo(validWarehouse);
     }
 
     @Test
@@ -70,7 +63,7 @@ public class WarehouseServiceTest {
 
     @Test
     @DisplayName("should throw if findWarehouseById not find")
-    void createWarehouse_suceeds() {
+    void createWarehouse_succeeds() {
         //arrange
         given(supervisorService.findSupervisor(UserSupervisorMock.validSupervisor().getUserId())).willReturn(UserSupervisorMock.validSupervisor());
         given(warehouseRepository.save(any())).willReturn(WarehouseMock.validWarehouse());
@@ -84,7 +77,7 @@ public class WarehouseServiceTest {
 
     @Test
     @DisplayName("should throw if findWarehouseById not find")
-    void getWarehouses_suceeds() {
+    void getWarehouses_succeeds() {
         //arrange
         given(warehouseRepository.findAll()).willReturn(Arrays.asList(WarehouseMock.validWarehouse()));
 
@@ -92,6 +85,6 @@ public class WarehouseServiceTest {
         List<Warehouse> responseList = warehouseService.getWarehouses();
 
         // assert
-        assertTrue(!responseList.isEmpty());
+        assertFalse(responseList.isEmpty());
     }
 }

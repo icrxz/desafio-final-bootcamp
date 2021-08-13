@@ -3,10 +3,9 @@ package com.mercadolibre.frescos_api_grupo_2_w2.util.mocks;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.UUID;
 
 public class BatchMock {
 
@@ -22,16 +21,21 @@ public class BatchMock {
         return batch;
     }
 
-    public static Batch validBatch () {
+    public static Batch validBatch (Product productMock) {
         Batch createdBatch = new Batch();
         createdBatch.setBatchId(1);
-        createdBatch.setCurrentQuantity(1);
+        createdBatch.setCurrentQuantity(10);
         createdBatch.setCurrentTemperature(100F);
         createdBatch.setDueDate(LocalDate.now());
         createdBatch.setManufacturingDate(LocalDate.now());
         createdBatch.setInitialQuantity(100);
         createdBatch.setMinimumTemperature(100F);
-        createdBatch.setProduct(ProductMock.validProduct());
+
+        if (productMock == null)
+            createdBatch.setProduct(ProductMock.validProduct(null));
+        else
+            createdBatch.setProduct(productMock);
+
         return createdBatch;
     }
 }

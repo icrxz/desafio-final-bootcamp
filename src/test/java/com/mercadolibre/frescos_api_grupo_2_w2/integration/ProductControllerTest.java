@@ -64,12 +64,12 @@ public class ProductControllerTest extends ControllerTest {
 
     private String loginSeller() throws JsonProcessingException {
         // insert user
-        Seller seller = UserSellerMock.validSeller(Optional.of(1L));
+        Seller seller = UserSellerMock.validSeller(1L);
         seller.setPassword(encoder.encode("any_password"));
         this.userRepository.save(seller);
 
         // payload
-        LoginPayload payload = new LoginPayload("any_email@email.com", "any_password");
+        LoginPayload payload = new LoginPayload(seller.getEmail(), "any_password");
         String jsonPayload = objectMapper.writeValueAsString(payload);
 
         ResponseEntity<String> responseEntity = this.testRestTemplate.postForEntity("/login", jsonPayload, String.class);
@@ -94,7 +94,7 @@ public class ProductControllerTest extends ControllerTest {
     }
 
     private Product insertProduct(ProductTypeEnum type, Seller seller) {
-        Product product = ProductMock.validProduct();
+        Product product = ProductMock.validProduct(null);
         product.setProductId(UUID.randomUUID());
         product.setType(type);
         product.setSeller(seller);
@@ -102,7 +102,7 @@ public class ProductControllerTest extends ControllerTest {
     }
 
     private Batch insertBatch(Product product, LocalDate dueDate) {
-        Batch batch = BatchMock.validBatch();
+        Batch batch = BatchMock.validBatch(null);
         batch.setProduct(product);
         batch.setDueDate(dueDate);
         return this.batchRepository.save(batch);
@@ -110,17 +110,17 @@ public class ProductControllerTest extends ControllerTest {
 
     @Test
     @DisplayName("should return 201 if createProduct succeeds")
-    void createProduct_suceeds() throws Exception {
+    void createProduct_succeeds() throws Exception {
         token = this.loginSeller();
         // arrange
-       Seller sellerMock = this.userRepository.save(UserSellerMock.validSeller(Optional.of(1L)));
+        Seller sellerMock = this.userRepository.save(UserSellerMock.validSeller(3L));
 
-       //mock Product
-       ProductForm productForm = new ProductForm();
-       productForm.setName("any_name");
-       productForm.setType(ProductTypeEnum.FRESH);
-       productForm.setSellerId(sellerMock.getUserId());
-       productForm.setValue(new BigDecimal(100));
+        //mock Product
+        ProductForm productForm = new ProductForm();
+        productForm.setName("any_name");
+        productForm.setType(ProductTypeEnum.FRESH);
+        productForm.setSellerId(sellerMock.getUserId());
+        productForm.setValue(BigDecimal.valueOf(15.50));
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);

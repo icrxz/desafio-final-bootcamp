@@ -59,23 +59,23 @@ public class BatchServiceTest {
     @DisplayName("should Batch if createBatch succeeds")
     void createBatch_succeeds () {
         //arrange
-        given(productService.findProductById(ProductMock.productID)).willReturn(ProductMock.validProduct());
-        given(batchRepository.save(any())).willReturn(BatchMock.validBatch());
+        given(productService.findProductById(ProductMock.productID)).willReturn(ProductMock.validProduct(null));
+        given(batchRepository.save(any())).willReturn(BatchMock.validBatch(null));
         given(sectionService.getSectionCurrentSize(any())).willReturn(100L);
 
         //act
         Batch response = batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection());
 
         //assert
-        assertThat(response.getBatchId()).isEqualTo(BatchMock.validBatch().getBatchId());
-        assertThat(response.getInboundOrder()).isEqualTo(BatchMock.validBatch().getInboundOrder());
+        assertThat(response.getBatchId()).isEqualTo(BatchMock.validBatch(null).getBatchId());
+        assertThat(response.getInboundOrder()).isEqualTo(BatchMock.validBatch(null).getInboundOrder());
     }
 
     @Test
     @DisplayName("should throws if section does not have enough capacity")
     void createBatch_SectionDontHaveEnoughCapacity () {
         //arrange
-        given(productService.findProductById(ProductMock.productID)).willReturn(ProductMock.validProduct());
+        given(productService.findProductById(ProductMock.productID)).willReturn(ProductMock.validProduct(null));
         given(sectionService.getSectionCurrentSize(any())).willReturn(0L);
 
         //act
@@ -85,9 +85,9 @@ public class BatchServiceTest {
 
     @Test
     @DisplayName("should throws if section and product have different types")
-    void createBatch_SectionAndProductsDifferentTypes() {
+    void createBatch_SectionAndProductsDifferentTypes () {
         //arrange
-        Product product = ProductMock.validProduct();
+        Product product = ProductMock.validProduct(null);
         product.setType(ProductTypeEnum.REFRIGERATED);
         given(productService.findProductById(ProductMock.productID)).willReturn(product);
         given(sectionService.getSectionCurrentSize(any())).willReturn(100L);
@@ -98,10 +98,29 @@ public class BatchServiceTest {
     }
 
     @Test
+    @DisplayName("should throws if section and product have different types")
+    void getBatchByProductId_succeeds () {
+        //arrange
+        UUID productId = UUID.randomUUID();
+        Product product = ProductMock.validProduct(productId);
+        Batch batch1 = BatchMock.validBatch(product);
+        Batch batch2 = BatchMock.validBatch(product);
+
+        given(batchRepository.findBatchesByProduct_productId(productId)).willReturn(Arrays.asList(batch1, batch2));
+
+        //act
+        List<Batch> response = batchService.findBatchesByProduct(productId);
+
+        //assert
+        assertEquals(2, response.size());
+        assertEquals(batch1.getBatchId(), response.get(0).getBatchId());
+    }
+
+    @Test
     @DisplayName("should return a Batch List if succeeds")
     void dueDateBatch_Succeeds() {
         //arrange
-        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch()));
+        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch(null)));
 
         //act
         List<Batch> batches = this.batchService.dueDateBatch(10);
@@ -114,7 +133,7 @@ public class BatchServiceTest {
     @DisplayName("should return a empty list if dueDateBatch succeeds")
     void dueDateBatch_SucceedsButReturnsEmptylist() {
         //arrange
-        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch()));
+        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch(null)));
 
         //act
         List<Batch> batches = this.batchService.dueDateBatch(10);
@@ -127,7 +146,7 @@ public class BatchServiceTest {
     @DisplayName("should return a Batch List if succeeds")
     void dueDateAndProductTypeBatch_Succeeds() {
         //arrange
-        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch()));
+        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch(null)));
 
         //act
         List<Batch> batches = this.batchService.dueDateBatch(10);
@@ -140,7 +159,7 @@ public class BatchServiceTest {
     @DisplayName("should return a empty list if dueDateBatch succeeds")
     void dueDateAndProductTypeBatch_SucceedsButReturnsEmptylist() {
         //arrange
-        given(this.batchRepository.findDueDateLessAndProductType(LocalDate.now().plusDays(10), ProductTypeEnum.FRESH)).willReturn(Arrays.asList(BatchMock.validBatch()));
+        given(this.batchRepository.findDueDateLessAndProductType(LocalDate.now().plusDays(10), ProductTypeEnum.FRESH)).willReturn(Arrays.asList(BatchMock.validBatch(null)));
 
         //act
         List<Batch> batches = this.batchService.dueDateAndProductTypeBatch(10L, ProductTypeEnum.FRESH);

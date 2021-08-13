@@ -23,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WarehouseControllerTest extends ControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
@@ -50,12 +49,12 @@ public class WarehouseControllerTest extends ControllerTest {
 
     private String loginSeller() throws JsonProcessingException {
         // insert user
-        Seller seller = UserSellerMock.validSeller(Optional.of(1L));
+        Seller seller = UserSellerMock.validSeller(1L);
         seller.setPassword(encoder.encode("any_password"));
         this.userRepository.save(seller);
 
         // payload
-        LoginPayload payload = new LoginPayload("any_email@email.com", "any_password");
+        LoginPayload payload = new LoginPayload(seller.getEmail(), "any_password");
         String jsonPayload = objectMapper.writeValueAsString(payload);
 
         ResponseEntity<String> responseEntity = this.testRestTemplate.postForEntity("/login", jsonPayload, String.class);
