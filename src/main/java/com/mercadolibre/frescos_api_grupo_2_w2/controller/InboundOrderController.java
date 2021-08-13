@@ -26,9 +26,4 @@ public class InboundOrderController {
 
         return new ResponseEntity(newInboundOrder, HttpStatus.CREATED);
     }
-
-//    @PutMapping
-//    public ResponseEntity updateInboundOrder(@RequestBody @Valid InboundOrderDTO inboundOrderDTO) {
-//
-//    }
 }

@@ -1,15 +1,9 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.util.mocks;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrderSectionForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrder.InboundOrderSectionForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SectionForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.SectionResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Section;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
-
-import javax.validation.constraints.NotNull;
-import java.util.Optional;
 import java.util.UUID;
 
 public class SectionMock {
@@ -19,7 +13,7 @@ public class SectionMock {
         SectionForm sectionForm = new SectionForm();
         sectionForm.setMaxCapacity(100);
         sectionForm.setWarehouseId(WarehouseMock.validWarehouse().getWarehouseId().toString());
-        sectionForm.setProductType(ProductTypeEnum.CARNES);
+        sectionForm.setProductType(ProductTypeEnum.FRESH);
         return sectionForm;
     }
 
@@ -28,7 +22,7 @@ public class SectionMock {
         section.setSectionId(sectionId);
         section.setWarehouse(WarehouseMock.validWarehouse());
         section.setMaxCapacity(100);
-        section.setProductType(ProductTypeEnum.CARNES);
+        section.setProductType(ProductTypeEnum.FRESH);
         return section;
     }
 

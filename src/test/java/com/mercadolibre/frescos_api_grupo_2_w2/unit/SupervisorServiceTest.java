@@ -37,15 +37,14 @@ public class SupervisorServiceTest {
     @DisplayName("should return a Supervisor if findSupervisor succeeds")
     void findSupervisor_succeeds() {
         //arrange
-        given(SupervisorRepository.findById(1L)).willReturn(Optional.of(UserSupervisorMock.validSupervisor(Optional.of(1L))));
+        given(SupervisorRepository.findById(1L)).willReturn(Optional.of(UserSupervisorMock.validSupervisor(1L)));
 
         // act
         Supervisor user = this.SupervisorService.findSupervisor(1L);
 
         // assert
         assertThat(user.getUserId()).isEqualTo(1L);
-        assertThat(user.getEmail()).isEqualTo("any_email@email.com");
-        assertThat(user.getPassword()).isEqualTo("any_password");
+        assertThat(user.getEmail()).isEqualTo("admin@email.com");
         assertThat(user.getRole()).isEqualTo("SUPERVISOR");
     }
 

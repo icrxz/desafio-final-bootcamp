@@ -42,8 +42,6 @@ public class PurchaseOrderService {
             throw new ApiException("404", "Purchase order not found with this id", 404);
         }
 
-        purchaseOrder.getProduct().forEach(tst -> System.out.println(tst.getProduct().getName() + " - " + tst.getProduct().getValue()));
-
         BigDecimal orderTotalValue = getPurchaseOrderTotalValue(purchaseOrder);
 
         return PurchaseOrderMapper.entityToResponse(purchaseOrder, orderTotalValue);

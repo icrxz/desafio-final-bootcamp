@@ -20,30 +20,22 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    private final PasswordEncoder encoder;
-
-    public UserController(PasswordEncoder encoder, UserService userService) {
-        this.encoder = encoder;
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/seller")
     public ResponseEntity<User> createSeller(@Valid @RequestBody SellerForm user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-
        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 
     @PostMapping("/supervisor")
     public ResponseEntity<User> createSupervisor(@Valid @RequestBody SupervisorForm user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 
     @PostMapping("/buyer")
     public ResponseEntity<User> createBuyer(@Valid @RequestBody BuyerForm user) {
-        user.setPassword(encoder.encode(user.getPassword()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 

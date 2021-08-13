@@ -33,6 +33,6 @@ public class WarehouseController {
     public ResponseEntity getAllWarehouses() {
         List<WarehouseResponse> warehouses = WarehouseMapper.entityListToResponseList(warehouseService.getWarehouses());
 
-        return new ResponseEntity(warehouses, HttpStatus.CREATED);
+        return new ResponseEntity(warehouses, HttpStatus.OK);
     }
 }

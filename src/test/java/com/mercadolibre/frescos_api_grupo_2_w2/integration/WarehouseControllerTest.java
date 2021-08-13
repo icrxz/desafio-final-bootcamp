@@ -2,11 +2,11 @@ package com.mercadolibre.frescos_api_grupo_2_w2.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.SectionForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.WarehouseForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Seller;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
+import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SupervisorRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.WarehouseRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSellerMock;
@@ -17,14 +17,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SectionControllerTest extends ControllerTest {
+public class WarehouseControllerTest extends ControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
     String token;
 
@@ -35,15 +33,19 @@ public class SectionControllerTest extends ControllerTest {
     private UserRepository userRepository;
 
     @Autowired
+    private SupervisorRepository supervisorRepository;
+
+    @Autowired
     private WarehouseRepository warehouseRepository;
 
     @BeforeEach
     void setup() throws Exception {
+        this.supervisorRepository.deleteAll();
         this.userRepository.deleteAll();
         this.warehouseRepository.deleteAll();
     }
 
-     private String loginSeller() throws JsonProcessingException {
+    private String loginSeller() throws JsonProcessingException {
         // insert user
         Seller seller = UserSellerMock.validSeller(1L);
         seller.setPassword(encoder.encode("any_password"));
@@ -75,44 +77,97 @@ public class SectionControllerTest extends ControllerTest {
     }
 
     @Test
-    @DisplayName("should return 403 if user is not authenticate ou have no permissions")
-    void createSection_userNotAuthenticate() throws Exception {
-        token = this.loginSeller();
+    @DisplayName("should return 201 if createWarehouse succeeds")
+    void createWarehouse_succeeds() throws Exception {
+        token = this.loginSupervisor();
+
+        // arrange
+        Supervisor supervisor = this.supervisorRepository.save(new Supervisor());
+        WarehouseForm form = new WarehouseForm();
+        form.setSupervisorId(supervisor.getUserId());
+
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);
 
-        HttpEntity<SectionForm> request = new HttpEntity<>(new SectionForm(), header);
+        HttpEntity<WarehouseForm> request = new HttpEntity<>(form, header);
 
-        ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/sections", request, String.class);
+        ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/warehouses", request, String.class);
+
+        //Verify request succeed
+        assertEquals(201, result.getStatusCodeValue());
+    }
+
+    @Test
+    @DisplayName("should return 404 if supervisor is not found")
+    void createWarehouse_SupervisorNotFound() throws Exception {
+        token = this.loginSupervisor();
+
+        // arrange
+        WarehouseForm form = new WarehouseForm();
+        form.setSupervisorId(100);
+
+        HttpHeaders header = new HttpHeaders();
+        header.set("Authorization", token);
+
+        HttpEntity<WarehouseForm> request = new HttpEntity<>(form, header);
+
+        ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/warehouses", request, String.class);
+
+        //Verify request succeed
+        assertEquals(404, result.getStatusCodeValue());
+    }
+
+    @Test
+    @DisplayName("should return 403 if userTokenProvided is not allowed")
+    void createWarehouse_AuthenticateError() throws Exception {
+        token = this.loginSeller();
+        // arrange
+        WarehouseForm form = new WarehouseForm();
+
+        HttpHeaders header = new HttpHeaders();
+        header.set("Authorization", token);
+
+        HttpEntity<WarehouseForm> request = new HttpEntity<>(form, header);
+
+        ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/warehouses", request, String.class);
 
         //Verify request succeed
         assertEquals(403, result.getStatusCodeValue());
     }
 
     @Test
-    @DisplayName("should return 201 if createSection succeeds")
-    void createSection_succeeds() throws Exception {
+    @DisplayName("should return All Warehouse if getAllWarehouses succeeds")
+    void getAllWarehouses_succeeds() throws Exception {
         token = this.loginSupervisor();
-        // arrange
-        Supervisor user = this.userRepository.save(UserSupervisorMock.validSupervisor());
-        Warehouse warehouse = WarehouseMock.validWarehouse();
-        warehouse.setSupervisor(user);
-        warehouse = this.warehouseRepository.save(warehouse);
 
-        //mock Section
-        SectionForm sectionForm = new SectionForm();
-        sectionForm.setMaxCapacity(100);
-        sectionForm.setWarehouseId(warehouse.getWarehouseId().toString());
-        sectionForm.setProductType(ProductTypeEnum.FRESH);
+        // arrange
+        // arrange
+        Supervisor supervisor = this.supervisorRepository.save(new Supervisor());
+        Warehouse warehouse = WarehouseMock.validWarehouse();
+        warehouse.getSupervisor().setUserId(supervisor.getUserId());
+        this.warehouseRepository.save(warehouse);
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);
 
-        HttpEntity<SectionForm> request = new HttpEntity<>(sectionForm, header);
-
-        ResponseEntity<String> result = this.testRestTemplate.postForEntity("/api/v1/sections", request, String.class);
+        ResponseEntity result = this.testRestTemplate.exchange("/api/v1/warehouses", HttpMethod.GET, new HttpEntity<>(header), String.class);
 
         //Verify request succeed
-        assertEquals(201, result.getStatusCodeValue());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
+
+    @Test
+    @DisplayName("should return 403 if userTokenProvided is not allowed")
+    void getAllWarehouses_AuthenticateError() throws Exception {
+        token = this.loginSeller();
+
+        HttpHeaders header = new HttpHeaders();
+        header.set("Authorization", token);
+
+        ResponseEntity result = this.testRestTemplate.exchange("/api/v1/warehouses", HttpMethod.GET, new HttpEntity<>(header), String.class);
+
+        //Verify request succeed
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+    }
+
 }
