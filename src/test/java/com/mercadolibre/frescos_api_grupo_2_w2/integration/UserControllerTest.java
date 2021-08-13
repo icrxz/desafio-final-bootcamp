@@ -33,12 +33,12 @@ class UserControllerTest extends ControllerTest {
     void setup() throws Exception {
         this.userRepository.deleteAll();
         // Insert user
-        Seller seller = UserSellerMock.validSeller(Optional.of(1L));
+        Seller seller = UserSellerMock.validSeller(1L);
         seller.setPassword(encoder.encode("any_password"));
         this.userRepository.save(seller);
 
         // payload
-        LoginPayload payload = new LoginPayload("any_email@email.com", "any_password");
+        LoginPayload payload = new LoginPayload(seller.getEmail(), "any_password");
         String jsonPayload = objectMapper.writeValueAsString(payload);
 
         ResponseEntity<String> responseEntity = this.testRestTemplate.postForEntity("/login", jsonPayload, String.class);
@@ -90,7 +90,7 @@ class UserControllerTest extends ControllerTest {
         this.userRepository.deleteAll();
 
         // Insert user supervisor
-        Supervisor supervisor = UserSupervisorMock.validSupervisor(Optional.of(1L));
+        Supervisor supervisor = UserSupervisorMock.validSupervisor(1L);
         supervisor.setEmail("other_email@email.com");
         supervisor.setRole("SUPERVISOR");
         supervisor.setPassword(encoder.encode("any_password"));
@@ -119,7 +119,7 @@ class UserControllerTest extends ControllerTest {
         this.userRepository.deleteAll();
 
         // Insert user supervisor
-        Supervisor supervisor = UserSupervisorMock.validSupervisor(Optional.of(1L));
+        Supervisor supervisor = UserSupervisorMock.validSupervisor(1L);
         supervisor.setEmail("other_email@email.com");
         supervisor.setRole("SUPERVISOR");
         supervisor.setPassword(encoder.encode("any_password"));

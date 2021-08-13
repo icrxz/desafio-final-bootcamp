@@ -45,7 +45,7 @@ public class SectionServiceTest {
     }
 
     @Test
-    @DisplayName("should return a Section if findSectonBy succeeds")
+    @DisplayName("should return a Section if findSectionBy succeeds")
     void findSectionById_succeeds() {
         //arrange
         UUID sectionId = UUID.fromString("0f14d0ab-9605-4a62-a9e4-5ed26688389b");

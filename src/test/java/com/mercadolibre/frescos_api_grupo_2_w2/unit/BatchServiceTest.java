@@ -1,11 +1,9 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
-import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.BatchRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.BatchService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.ProductService;
@@ -54,23 +52,23 @@ public class BatchServiceTest {
     @DisplayName("should Batch if createBatch succeeds")
     void createBatch_succeeds () {
         //arrange
-        given(productService.findProductById(ProductMock.productID)).willReturn(ProductMock.validProduct());
-        given(batchRepository.save(any())).willReturn(BatchMock.validBatch());
+        given(productService.findProductById(ProductMock.productID)).willReturn(ProductMock.validProduct(null));
+        given(batchRepository.save(any())).willReturn(BatchMock.validBatch(null));
         given(sectionService.getSectionCurrentSize(any())).willReturn(100L);
 
         //act
         Batch response = batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection());
 
         //assert
-        assertThat(response.getBatchId()).isEqualTo(BatchMock.validBatch().getBatchId());
-        assertThat(response.getInboundOrder()).isEqualTo(BatchMock.validBatch().getInboundOrder());
+        assertThat(response.getBatchId()).isEqualTo(BatchMock.validBatch(null).getBatchId());
+        assertThat(response.getInboundOrder()).isEqualTo(BatchMock.validBatch(null).getInboundOrder());
     }
 
     @Test
     @DisplayName("should throws if section does not have enough capacity")
     void createBatch_SectionDontHaveEnoughCapacity () {
         //arrange
-        given(productService.findProductById(ProductMock.productID)).willReturn(ProductMock.validProduct());
+        given(productService.findProductById(ProductMock.productID)).willReturn(ProductMock.validProduct(null));
         given(sectionService.getSectionCurrentSize(any())).willReturn(0L);
 
         //act
@@ -82,7 +80,7 @@ public class BatchServiceTest {
     @DisplayName("should throws if section and product have different types")
     void createBatch_SectionAndProductsDifferentTypes () {
         //arrange
-        Product product = ProductMock.validProduct();
+        Product product = ProductMock.validProduct(null);
         product.setType(ProductTypeEnum.REFRIGERATED);
         given(productService.findProductById(ProductMock.productID)).willReturn(product);
         given(sectionService.getSectionCurrentSize(any())).willReturn(100L);
