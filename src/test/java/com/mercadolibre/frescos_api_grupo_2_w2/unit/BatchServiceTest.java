@@ -21,11 +21,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -80,7 +85,7 @@ public class BatchServiceTest {
 
     @Test
     @DisplayName("should throws if section and product have different types")
-    void createBatch_SectionAndProductsDifferentTypes () {
+    void createBatch_SectionAndProductsDifferentTypes() {
         //arrange
         Product product = ProductMock.validProduct();
         product.setType(ProductTypeEnum.REFRIGERATED);
@@ -90,5 +95,57 @@ public class BatchServiceTest {
         //act
         assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection()))
                 .isInstanceOf(ApiException.class);
+    }
+
+    @Test
+    @DisplayName("should return a Batch List if succeeds")
+    void dueDateBatch_Succeeds() {
+        //arrange
+        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch()));
+
+        //act
+        List<Batch> batches = this.batchService.dueDateBatch(10);
+
+        //assert
+        assertTrue(!batches.isEmpty());
+    }
+
+    @Test
+    @DisplayName("should return a empty list if dueDateBatch succeeds")
+    void dueDateBatch_SucceedsButReturnsEmptylist() {
+        //arrange
+        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch()));
+
+        //act
+        List<Batch> batches = this.batchService.dueDateBatch(10);
+
+        //assert
+        assertTrue(!batches.isEmpty());
+    }
+
+    @Test
+    @DisplayName("should return a Batch List if succeeds")
+    void dueDateAndProductTypeBatch_Succeeds() {
+        //arrange
+        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch()));
+
+        //act
+        List<Batch> batches = this.batchService.dueDateBatch(10);
+
+        //assert
+        assertTrue(!batches.isEmpty());
+    }
+
+    @Test
+    @DisplayName("should return a empty list if dueDateBatch succeeds")
+    void dueDateAndProductTypeBatch_SucceedsButReturnsEmptylist() {
+        //arrange
+        given(this.batchRepository.findDueDateLessAndProductType(LocalDate.now().plusDays(10), ProductTypeEnum.FRESH)).willReturn(Arrays.asList(BatchMock.validBatch()));
+
+        //act
+        List<Batch> batches = this.batchService.dueDateAndProductTypeBatch(10L, ProductTypeEnum.FRESH);
+
+        //assert
+        assertTrue(!batches.isEmpty());
     }
 }

@@ -1,4 +1,4 @@
-package com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms;
+package com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
