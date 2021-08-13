@@ -1,4 +1,4 @@
-package com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses;
+package com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.warehouse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
