@@ -2,6 +2,7 @@ package com.mercadolibre.frescos_api_grupo_2_w2.exceptions.Handler;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.ExceptionDTO;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.BatchNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.InternalServerErrorException;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,11 @@ public class APIExceptionHandler {
 
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ExceptionDTO> defaultHandler(ProductNotFoundException e){
+        return ResponseEntity.badRequest().body(new ExceptionDTO(e.getMessage()));
+    }
+
+    @ExceptionHandler(BatchNotFoundException.class)
+    public ResponseEntity<ExceptionDTO> defaultHandler(BatchNotFoundException e){
         return ResponseEntity.badRequest().body(new ExceptionDTO(e.getMessage()));
     }
 
