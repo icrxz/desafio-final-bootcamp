@@ -36,9 +36,16 @@ public class InboundOrderService {
         List<BatchForm> failedBatches = new ArrayList<>();
         List<String> errorMessages = new ArrayList<>();
 
+        InboundOrder newInboundOrder = InboundOrder.builder()
+                .date(inboundOrderForm.getOrderDate())
+                .number(inboundOrderForm.getOrderNumber())
+                .section(section)
+                .build();
+        InboundOrder createdInboundOrder = inboundOrderRepository.save(newInboundOrder);
+
         inboundOrderForm.getBatchStock().forEach(batch -> {
             try {
-                Batch createdBatch = batchService.createBatch(batch, section);
+                Batch createdBatch = batchService.createBatch(batch, section, createdInboundOrder);
 
                 successBatches.add(createdBatch);
             } catch (Exception ex) {
@@ -47,13 +54,7 @@ public class InboundOrderService {
             }
         });
 
-        InboundOrder newInboundOrder = InboundOrder.builder()
-                .batchStock(successBatches)
-                .date(inboundOrderForm.getOrderDate())
-                .number(inboundOrderForm.getOrderNumber())
-                .section(section)
-                .build();
-        InboundOrder createdInboundOrder = inboundOrderRepository.save(newInboundOrder);
+        createdInboundOrder.setBatchStock(successBatches);
 
         return InboundOrderMapper.inboundOrderToResponse(createdInboundOrder, failedBatches, errorMessages);
     }
