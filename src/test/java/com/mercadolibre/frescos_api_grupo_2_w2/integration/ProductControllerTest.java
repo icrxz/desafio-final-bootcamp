@@ -4,11 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.ProductForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SellerForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.ProductRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SellerRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
+import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.ProductMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSellerMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.UserSupervisorMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.payloads.LoginPayload;
@@ -18,10 +20,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProductControllerTest extends ControllerTest {
@@ -130,4 +136,34 @@ public class ProductControllerTest extends ControllerTest {
         assertEquals(403, result.getStatusCodeValue());
     }
 
+    @Test
+    @DisplayName("should return a product list if getProductsByCategory succeeds")
+    void getProductsByCategory_succeeds() {
+        HttpEntity<ProductForm> request = new HttpEntity<>(new ProductForm());
+        Product product = ProductMock.validProduct(UUID.randomUUID());
+        Seller seller = this.sellerRepository.save(UserSellerMock.validSeller());
+        product.setSeller(seller);
+        product = this.productRepository.save(product);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/api/v1/fresh-products/list")
+                .queryParam("productType", ProductTypeEnum.FRESH.getCode());
+
+        ResponseEntity<ProductResponse[]> result = this.testRestTemplate.exchange(builder.toUriString(), HttpMethod.GET, request, ProductResponse[].class);
+        assertEquals(200, result.getStatusCodeValue());
+        assertEquals(product.getProductId(), result.getBody()[0].getProductId());
+    }
+
+    @Test
+    @DisplayName("should return a product list if getAllProducts succeeds")
+    void getAllProducts_succeeds() {
+        HttpEntity<ProductForm> request = new HttpEntity<>(new ProductForm());
+        Product product = ProductMock.validProduct(UUID.randomUUID());
+        Seller seller = this.sellerRepository.save(UserSellerMock.validSeller());
+        product.setSeller(seller);
+        product = this.productRepository.save(product);
+
+        ResponseEntity<ProductResponse[]> result = this.testRestTemplate.exchange("/api/v1/fresh-products", HttpMethod.GET, request, ProductResponse[].class);
+        assertEquals(200, result.getStatusCodeValue());
+        assertEquals(product.getProductId(), result.getBody()[0].getProductId());
+    }
 }
