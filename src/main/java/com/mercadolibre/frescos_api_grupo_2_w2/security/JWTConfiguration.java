@@ -43,6 +43,7 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/batch/list").hasAuthority("SUPERVISOR")
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/batch/list/order").hasAuthority("SUPERVISOR")
                 .antMatchers(HttpMethod.POST, "/api/v1/sections").hasAuthority("SUPERVISOR")
+                .antMatchers("/api/v1/fresh-products/warehouses").hasAuthority("SUPERVISOR")
                 .antMatchers("/api/v1/fresh-products/warehouses/*").hasAuthority("SUPERVISOR");
 
         http.csrf().disable().authorizeRequests()
@@ -53,7 +54,6 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/category/list").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products").permitAll();
-
 
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
