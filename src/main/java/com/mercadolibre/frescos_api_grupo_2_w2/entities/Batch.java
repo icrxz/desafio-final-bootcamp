@@ -19,10 +19,10 @@ public class Batch {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long batchId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private InboundOrder inboundOrder;
 
     private long number;
