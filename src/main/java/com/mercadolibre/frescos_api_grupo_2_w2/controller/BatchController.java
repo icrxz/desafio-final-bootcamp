@@ -28,26 +28,4 @@ public class BatchController {
         this.batchService = batchService;
         this.sectionService = sectionService;
     }
-
-
-    @GetMapping("/list")
-    public ResponseEntity findBatchByProduct(@RequestParam UUID productId) {
-
-        BatchCompleteResponse batchCompleteResponse = new BatchCompleteResponse();
-        batchCompleteResponse.setBatchStock(BatchMapper.batchRolToListResponse(batchService.findBatchesByProduct(productId)));
-        batchCompleteResponse.setProductId(productId);
-
-        return new ResponseEntity(batchCompleteResponse, HttpStatus.OK);
-    }
-
-    @GetMapping("/list/order")
-    public ResponseEntity findBatchByProductOrder(@RequestParam(value = "productId") UUID productId,
-                                                  @RequestParam(value = "order", defaultValue = "C")OrderBatch orderBatch) {
-        BatchCompleteResponse batchCompleteResponse = new BatchCompleteResponse();
-        batchCompleteResponse.setBatchStock(BatchMapper.batchRolToListResponse(batchService.findBatchesByProductOrder(productId, orderBatch)));
-        batchCompleteResponse.setProductId(productId);
-
-        return new ResponseEntity(batchCompleteResponse, HttpStatus.OK);
-    }
-
 }
