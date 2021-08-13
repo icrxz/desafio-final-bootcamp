@@ -8,6 +8,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Section;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
