@@ -19,6 +19,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -88,5 +90,24 @@ public class BatchServiceTest {
         //act
         assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection()))
                 .isInstanceOf(ApiException.class);
+    }
+
+    @Test
+    @DisplayName("should throws if section and product have different types")
+    void getBatchByProductId_succeeds () {
+        //arrange
+        UUID productId = UUID.randomUUID();
+        Product product = ProductMock.validProduct(productId);
+        Batch batch1 = BatchMock.validBatch(product);
+        Batch batch2 = BatchMock.validBatch(product);
+
+        given(batchRepository.findBatchesByProduct_productId(productId)).willReturn(Arrays.asList(batch1, batch2));
+
+        //act
+        List<Batch> response = batchService.findBatchesByProduct(productId);
+
+        //assert
+        assertEquals(2, response.size());
+        assertEquals(batch1.getBatchId(), response.get(0).getBatchId());
     }
 }
