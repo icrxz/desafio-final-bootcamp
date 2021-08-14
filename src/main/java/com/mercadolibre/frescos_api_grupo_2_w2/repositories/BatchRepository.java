@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @Repository
 public interface BatchRepository extends JpaRepository<Batch, Long> {
+
     List<Batch> findBatchesByProduct(Product product);
     List<Batch> findBatchesByProduct_productId(UUID productId);
     List<Batch> findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate dueDate);
@@ -23,4 +24,10 @@ public interface BatchRepository extends JpaRepository<Batch, Long> {
             " and b.product.type = :productType " +
             "order by b.dueDate asc")
     List<Batch> findDueDateLessAndProductType(LocalDate dueDate, ProductTypeEnum productType);
+
+    List<Batch> findBatchesByProduct_productId (UUID productId);
+
+    List<Batch> findBatchesByProduct_productIdOrderByCurrentQuantityAsc (UUID productId);
+
+    List<Batch> findBatchesByProduct_productIdOrderByDueDateAsc (UUID productId);
 }

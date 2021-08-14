@@ -26,7 +26,8 @@ public class InboundOrder {
     @ManyToOne
     private Section section;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inboundOrder")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "inboundOrder")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Builder.Default
     private List<Batch> batchStock = new ArrayList<>();
 }

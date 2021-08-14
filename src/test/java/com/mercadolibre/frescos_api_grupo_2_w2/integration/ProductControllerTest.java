@@ -7,6 +7,8 @@ import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product.ProductByDueDa
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product.ProductForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SellerForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchResponse;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchCompleteResponse;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.BatchRepository;
@@ -23,6 +25,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -30,7 +36,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.UUID;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -173,6 +181,37 @@ public class ProductControllerTest extends ControllerTest {
         //Case 2
         Product product2 = insertProduct(ProductTypeEnum.REFRIGERATED, seller);
         insertBatch(product2, LocalDate.now().plusDays(2));
+    }
+    
+    @DisplayName("should return a product list if getProductsByCategory succeeds")
+    void getProductsByCategory_succeeds() throws JsonProcessingException {
+        token = this.loginSupervisor();
+        HttpHeaders header = new HttpHeaders();
+        header.set("Authorization", token);
+
+        HttpEntity<ProductForm> request = new HttpEntity<>(new ProductForm());
+        Product product = ProductMock.validProduct(UUID.randomUUID());
+        Seller seller = this.sellerRepository.save(UserSellerMock.validSeller());
+        product.setSeller(seller);
+        product = this.productRepository.save(product);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/api/v1/fresh-products/category/list")
+                .queryParam("productType", ProductTypeEnum.FRESH.getCode());
+
+        ResponseEntity<ProductResponse[]> result = this.testRestTemplate.exchange(builder.toUriString(), HttpMethod.GET, new HttpEntity(header), ProductResponse[].class);
+        assertEquals(200, result.getStatusCodeValue());
+        assertEquals(product.getProductId(), result.getBody()[0].getProductId());
+    }
+
+    @Test
+    @DisplayName("should return a product list if getAllProducts succeeds")
+    void getAllProducts_succeeds() throws JsonProcessingException {
+        token = this.loginSupervisor();
+
+        Product product = ProductMock.validProduct(UUID.randomUUID());
+        Seller seller = this.sellerRepository.save(UserSellerMock.validSeller());
+        product.setSeller(seller);
+        product = this.productRepository.save(product);
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);
@@ -186,6 +225,14 @@ public class ProductControllerTest extends ControllerTest {
     @Test
     @DisplayName("should return a empty list of Batches if not found matched products")
     void getDueDateByDays_notFoundProduct() throws JsonProcessingException {
+        ResponseEntity<ProductResponse[]> result = this.testRestTemplate.exchange("/api/v1/fresh-products", HttpMethod.GET, new HttpEntity(header), ProductResponse[].class);
+        assertEquals(200, result.getStatusCodeValue());
+        assertEquals(product.getProductId(), result.getBody()[0].getProductId());
+    }
+
+    @Test
+    @DisplayName("should return a batch list if getAllProducts succeeds")
+    void findBatchByProduct_succeeds() throws JsonProcessingException {
         token = this.loginSupervisor();
         Seller seller = this.userRepository.save(UserSellerMock.validSeller(null));
 
@@ -193,6 +240,12 @@ public class ProductControllerTest extends ControllerTest {
         //Case 1
         Product product = insertProduct(ProductTypeEnum.FRESH, seller);
         insertBatch(product, LocalDate.now().plusDays(11));
+        insertBatch(product, LocalDate.now());
+        insertBatch(product, LocalDate.now().plusDays(2));
+        insertBatch(product, LocalDate.now().plusDays(10));
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/api/v1/fresh-products/batch/list")
+                .queryParam("productId", product.getProductId());
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);
@@ -211,6 +264,24 @@ public class ProductControllerTest extends ControllerTest {
         header.set("Authorization", token);
 
         ResponseEntity<String> result = this.testRestTemplate.exchange("/api/v1/fresh-products/due-date?days=10", HttpMethod.GET, new HttpEntity<>(header), String.class);
+        ResponseEntity<BatchCompleteResponse> result = this.testRestTemplate.exchange(builder.toUriString(), HttpMethod.GET, new HttpEntity(header), BatchCompleteResponse.class);
+
+        assertEquals(200, result.getStatusCodeValue());
+        assertTrue(result.getBody().getBatchStock().size() == 3);
+    }
+
+    @Test
+    @DisplayName("should return 403 if user is not authenticate ou have no permissions")
+    void findBatchByProduct_forbidden() throws JsonProcessingException {
+        token = this.loginSeller();
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/api/v1/fresh-products/batch/list")
+                .queryParam("productId", UUID.randomUUID());
+
+        HttpHeaders header = new HttpHeaders();
+        header.set("Authorization", token);
+
+        ResponseEntity<String> result = this.testRestTemplate.exchange(builder.toUriString(), HttpMethod.GET, new HttpEntity(header), String.class);
         assertEquals(403, result.getStatusCodeValue());
     }
 
@@ -236,6 +307,26 @@ public class ProductControllerTest extends ControllerTest {
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/api/v1/fresh-products/due-date/list")
                 .queryParam("days", 10)
                 .queryParam("type", ProductTypeEnum.FRESH.toString());
+=======
+    @DisplayName("should return a ordered batch list if getAllProducts succeeds")
+    void findBatchByProductOrder_succeeds() throws JsonProcessingException {
+        token = this.loginSupervisor();
+        Seller seller = this.userRepository.save(UserSellerMock.validSeller(null));
+
+        //Insert products and batch
+        //Case 1
+        Product product = insertProduct(ProductTypeEnum.FRESH, seller);
+        insertBatch(product, LocalDate.now());
+        insertBatch(product, LocalDate.now().plusDays(2));
+        insertBatch(product, LocalDate.now().plusDays(10));
+
+        //OtherProduct
+        Product product2 = insertProduct(ProductTypeEnum.FRESH, seller);
+        insertBatch(product2, LocalDate.now());
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/api/v1/fresh-products/batch/list/order")
+                .queryParam("productId", product.getProductId())
+                .queryParam("order", "F");
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);
@@ -256,6 +347,22 @@ public class ProductControllerTest extends ControllerTest {
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/api/v1/fresh-products/due-date/list")
                 .queryParam("days", 10)
                 .queryParam("type", ProductTypeEnum.FRESH.toString());
+        ResponseEntity<BatchCompleteResponse> result = this.testRestTemplate.exchange(builder.toUriString(), HttpMethod.GET, new HttpEntity(header), BatchCompleteResponse.class);
+
+        assertEquals(200, result.getStatusCodeValue());
+        assertTrue(result.getBody().getBatchStock().size() == 3);
+        assertEquals(result.getBody().getBatchStock().get(0).getDueDate(), LocalDate.now());
+        assertEquals(result.getBody().getBatchStock().get(1).getDueDate(), LocalDate.now().plusDays(2));
+        assertEquals(result.getBody().getBatchStock().get(2).getDueDate(), LocalDate.now().plusDays(10));
+    }
+
+    @Test
+    @DisplayName("should return 403 if user is not authenticate ou have no permissions")
+    void findBatchByProductOrder_forbidden() throws JsonProcessingException {
+        token = this.loginSeller();
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/api/v1/fresh-products/batch/list/order")
+                .queryParam("productId", UUID.randomUUID());
 
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);

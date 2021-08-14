@@ -13,14 +13,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BatchResponse {
+public class BatchListResponse {
     private long batchNumber;
-    private UUID productId;
-    private float currentTemperature;
-    private float minimumTemperature;
-    private int initialQuantity;
     private int currentQuantity;
-    private LocalDate manufacturingDate;
-    private LocalDateTime manufacturingTime;
     private LocalDate dueDate;
 }

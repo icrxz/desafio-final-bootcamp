@@ -40,18 +40,22 @@ public class JWTConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/fresh-products/orders").hasAuthority("BUYER")
                 .antMatchers(HttpMethod.POST, "/api/v1/fresh-products").hasAnyAuthority("SUPERVISOR", "SELLER")
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products").hasAnyAuthority("SUPERVISOR", "BUYER")
-                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/list").hasAnyAuthority("SUPERVISOR", "BUYER")
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/batch/list").hasAuthority("SUPERVISOR")
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/batch/list/order").hasAuthority("SUPERVISOR")
                 .antMatchers(HttpMethod.POST, "/api/v1/sections").hasAuthority("SUPERVISOR")
                 .antMatchers("/api/v1/warehouses").hasAuthority("SUPERVISOR")
                 .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/due-date/**").hasAuthority("SUPERVISOR");
+                .antMatchers("/api/v1/fresh-products/warehouses").hasAuthority("SUPERVISOR")
+                .antMatchers("/api/v1/fresh-products/warehouses/*").hasAuthority("SUPERVISOR");
 
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/seller").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/buyer").permitAll()
                 .antMatchers(HttpMethod.GET, "/fake").permitAll()
-                .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll();
-
+                .antMatchers(HttpMethod.GET, "/v3/api-docs").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products/category/list").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/fresh-products").permitAll();
 
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()

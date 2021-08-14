@@ -2,7 +2,9 @@ package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderBatch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
@@ -11,6 +13,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.services.BatchService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.ProductService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.SectionService;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.BatchMock;
+import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.InboundOrderMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.ProductMock;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.SectionMock;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,7 +67,7 @@ public class BatchServiceTest {
         given(sectionService.getSectionCurrentSize(any())).willReturn(100L);
 
         //act
-        Batch response = batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection());
+        Batch response = batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection(), InboundOrderMock.validInboundOrder());
 
         //assert
         assertThat(response.getBatchId()).isEqualTo(BatchMock.validBatch(null).getBatchId());
@@ -79,7 +82,7 @@ public class BatchServiceTest {
         given(sectionService.getSectionCurrentSize(any())).willReturn(0L);
 
         //act
-        assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection()))
+        assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection(), InboundOrderMock.validInboundOrder()))
                 .isInstanceOf(ApiException.class);
     }
 
@@ -93,7 +96,7 @@ public class BatchServiceTest {
         given(sectionService.getSectionCurrentSize(any())).willReturn(100L);
 
         //act
-        assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection()))
+        assertThatThrownBy(() -> batchService.createBatch(BatchMock.validBatchForm(), SectionMock.validSection(), InboundOrderMock.validInboundOrder()))
                 .isInstanceOf(ApiException.class);
     }
 
@@ -166,5 +169,57 @@ public class BatchServiceTest {
 
         //assert
         assertTrue(!batches.isEmpty());
+    }
+=======
+    @DisplayName("sort batch list by current quantity")
+    void findBatchByProductOrdersCurrentQuantityAsc () {
+        //arrange
+        UUID productId = UUID.randomUUID();
+        Product product = ProductMock.validProduct(productId);
+        Batch batch1 = BatchMock.validBatch(product);
+        batch1.setCurrentQuantity(10);
+        Batch batch2 = BatchMock.validBatch(product);
+        batch2.setCurrentQuantity(20);
+        Batch batch3 = BatchMock.validBatch(product);
+        batch3.setCurrentQuantity(30);
+
+        given(batchRepository.findBatchesByProduct_productIdOrderByCurrentQuantityAsc(productId)).willReturn(Arrays.asList(batch1, batch2, batch3));
+
+        //act
+        List<Batch> response = batchService.findBatchesByProductOrder(productId,OrderBatch.C);
+
+        //assert
+        assertEquals(3, response.size());
+        assertEquals(10, response.get(0).getCurrentQuantity());
+        assertEquals(20, response.get(1).getCurrentQuantity());
+        assertEquals(30, response.get(2).getCurrentQuantity());
+
+        //assertEquals(responseDate.get(0).getCurrentQuantity(), response.get(0).getCurrentQuantity());
+    }
+
+    @Test
+    @DisplayName("sort batch list by due date")
+    void findBatchByProductOrdersDueDateAsc () {
+        //arrange
+        UUID productId = UUID.randomUUID();
+        Product product = ProductMock.validProduct(productId);
+        Batch batch1 = BatchMock.validBatch(product);
+        batch1.setDueDate(LocalDate.parse("2021-07-07"));
+        Batch batch2 = BatchMock.validBatch(product);
+        batch2.setDueDate(LocalDate.parse("2022-07-07"));
+        Batch batch3 = BatchMock.validBatch(product);
+        batch3.setDueDate(LocalDate.parse("2023-07-07"));
+
+        given(batchRepository.findBatchesByProduct_productIdOrderByDueDateAsc(productId)).willReturn(Arrays.asList(batch1, batch2, batch3));
+
+        //act
+        List<Batch> response = batchService.findBatchesByProductOrder(productId,OrderBatch.F);
+
+        //assert
+        assertEquals(3, response.size());
+        assertEquals(LocalDate.parse("2021-07-07"), response.get(0).getDueDate());
+        assertEquals(LocalDate.parse("2022-07-07"), response.get(1).getDueDate());
+        assertEquals(LocalDate.parse("2023-07-07"), response.get(2).getDueDate());
+
     }
 }

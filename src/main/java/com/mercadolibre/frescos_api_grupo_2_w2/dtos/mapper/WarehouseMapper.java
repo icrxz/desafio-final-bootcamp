@@ -1,6 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.WarehouseResponse;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.warehouse.WarehouseResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Warehouse;
 
 import java.util.List;

@@ -105,10 +105,12 @@
                 <version>0.8.5</version>
                 <configuration>
                     <excludes>
-                        <exclude>**/com/mercadolibre/**/dto/**</exclude>
+                        <exclude>**/com/mercadolibre/**/dtos/**</exclude>
                         <exclude>**/com/mercadolibre/**/api/**</exclude>
-                        <exclude>**/com/mercadolibre/**/model/**</exclude>
+                        <exclude>**/com/mercadolibre/**/config/**</exclude>
+                        <exclude>**/com/mercadolibre/**/entities/**</exclude>
                         <exclude>**/com/mercadolibre/**/exceptions/**</exclude>
+                        <exclude>**/com/mercadolibre/**/Application.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
