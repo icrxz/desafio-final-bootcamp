@@ -25,8 +25,6 @@ public interface BatchRepository extends JpaRepository<Batch, Long> {
             "order by b.dueDate asc")
     List<Batch> findDueDateLessAndProductType(LocalDate dueDate, ProductTypeEnum productType);
 
-    List<Batch> findBatchesByProduct_productId (UUID productId);
-
     List<Batch> findBatchesByProduct_productIdOrderByCurrentQuantityAsc (UUID productId);
 
     List<Batch> findBatchesByProduct_productIdOrderByDueDateAsc (UUID productId);

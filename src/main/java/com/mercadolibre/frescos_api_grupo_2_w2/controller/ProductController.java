@@ -1,14 +1,10 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.controller;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product.ProductByDueDateAndTypeForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product.ProductForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.BatchMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.ProductForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper.BatchMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchCompleteResponse;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderBatch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.BatchService;

@@ -170,7 +170,7 @@ public class BatchServiceTest {
         //assert
         assertTrue(!batches.isEmpty());
     }
-=======
+
     @DisplayName("sort batch list by current quantity")
     void findBatchByProductOrdersCurrentQuantityAsc () {
         //arrange
