@@ -2,7 +2,7 @@ package com.mercadolibre.frescos_api_grupo_2_w2.integration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.ProductForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product.ProductForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.purchaseOrder.PurchaseOrderForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.purchaseOrder.PurchaseOrderProductsForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.purchaseOrder.PurchaseOrderResponse;

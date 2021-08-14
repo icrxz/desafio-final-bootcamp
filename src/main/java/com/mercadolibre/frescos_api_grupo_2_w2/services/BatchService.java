@@ -1,10 +1,12 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product.ProductByDueDateAndTypeForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Section;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderBatch;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
@@ -12,6 +14,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.repositories.BatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -84,5 +87,15 @@ public class BatchService {
         }
 
         return batchList;
+    }
+
+    public List<Batch> dueDateBatch(long days) {
+        LocalDate date = LocalDate.now().plusDays(days);
+        return this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(date);
+    }
+
+    public List<Batch> dueDateAndProductTypeBatch(Long day, ProductTypeEnum type) {
+        LocalDate date = LocalDate.now().plusDays(day);
+        return this.batchRepository.findDueDateLessAndProductType(date, type);
     }
 }

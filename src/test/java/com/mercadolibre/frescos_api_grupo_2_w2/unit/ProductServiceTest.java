@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.ProductForm;
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product.ProductForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.ProductResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
@@ -62,7 +62,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("should throws if id not belong to any Product")
-    void findProductById_productNotFound() {
+    void findSectionById_sectionNotFound() {
         UUID productId = ProductMock.productID;
 
         assertThatThrownBy(() -> productService.findProductById(productId))
@@ -71,11 +71,12 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("should throws if id not belong to any Product")
-    void findProductById_productNotFoundMessage() {
+    void findSectionById_sectionNotFoundMessage() {
         UUID productId = ProductMock.productID;
 
         Throwable exception = assertThrows(ProductNotFoundException.class, () -> productService.findProductById(productId));
         assertEquals("Product not found with this id", exception.getMessage());
+
     }
 
      @Test

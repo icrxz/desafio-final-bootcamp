@@ -1,11 +1,13 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 
+import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderBatch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.BatchRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.BatchService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.ProductService;
@@ -31,6 +33,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -117,6 +120,57 @@ public class BatchServiceTest {
     }
 
     @Test
+    @DisplayName("should return a Batch List if succeeds")
+    void dueDateBatch_Succeeds() {
+        //arrange
+        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch(null)));
+
+        //act
+        List<Batch> batches = this.batchService.dueDateBatch(10);
+
+        //assert
+        assertTrue(!batches.isEmpty());
+    }
+
+    @Test
+    @DisplayName("should return a empty list if dueDateBatch succeeds")
+    void dueDateBatch_SucceedsButReturnsEmptylist() {
+        //arrange
+        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch(null)));
+
+        //act
+        List<Batch> batches = this.batchService.dueDateBatch(10);
+
+        //assert
+        assertTrue(!batches.isEmpty());
+    }
+
+    @Test
+    @DisplayName("should return a Batch List if succeeds")
+    void dueDateAndProductTypeBatch_Succeeds() {
+        //arrange
+        given(this.batchRepository.findByDueDateLessThanEqualOrderByDueDateAsc(LocalDate.now().plusDays(10))).willReturn(Arrays.asList(BatchMock.validBatch(null)));
+
+        //act
+        List<Batch> batches = this.batchService.dueDateBatch(10);
+
+        //assert
+        assertTrue(!batches.isEmpty());
+    }
+
+    @Test
+    @DisplayName("should return a empty list if dueDateBatch succeeds")
+    void dueDateAndProductTypeBatch_SucceedsButReturnsEmptylist() {
+        //arrange
+        given(this.batchRepository.findDueDateLessAndProductType(LocalDate.now().plusDays(10), ProductTypeEnum.FRESH)).willReturn(Arrays.asList(BatchMock.validBatch(null)));
+
+        //act
+        List<Batch> batches = this.batchService.dueDateAndProductTypeBatch(10L, ProductTypeEnum.FRESH);
+
+        //assert
+        assertTrue(!batches.isEmpty());
+    }
+=======
     @DisplayName("sort batch list by current quantity")
     void findBatchByProductOrdersCurrentQuantityAsc () {
         //arrange
@@ -168,5 +222,4 @@ public class BatchServiceTest {
         assertEquals(LocalDate.parse("2023-07-07"), response.get(2).getDueDate());
 
     }
-
 }
