@@ -26,8 +26,6 @@ Implementação da API do projeto final do Bootcamp Meli da wave 2.
 * [US05](https://drive.google.com/file/d/1kcHtsFa35x5feUX9hCeHsW4HFk-hR6gy/view)
 * [US06](https://drive.google.com/file/d/1hNOHcg1V8ggv4qp7KgaG1CV4EHNNpaPE/view)
 
-# Arquitetura do Banco de Dados 🎲
-
 # Endpoints 🔥
 ## Batch
 Method: GET
