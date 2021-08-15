@@ -17,6 +17,17 @@ Implementação da API do projeto final do Bootcamp Meli da wave 2.
 
 ![technology Java](https://img.shields.io/badge/lombok-v1.18.20-green.svg?style=flat-square)
 
+# Especificações de Requisitos 📋
+
+* [US01](https://drive.google.com/file/d/1X7YVc-DrSOa7KPR5nUF3Vi-ZkiMaUF9_/view)
+* [US02](https://drive.google.com/file/d/136B0QgcQ2czB-ij_vt1t9YUON8xP8LlX/view)
+* [US03](https://drive.google.com/file/d/1y7mP_PtO68TqkapqAOgvStwedq9WRr59/view)
+* [US04](https://drive.google.com/file/d/1DIWGoZe9I-dHUtASFoiQ1pG21n5mK5ZZ/view)
+* [US05](https://drive.google.com/file/d/1kcHtsFa35x5feUX9hCeHsW4HFk-hR6gy/view)
+* [US06](https://drive.google.com/file/d/1hNOHcg1V8ggv4qp7KgaG1CV4EHNNpaPE/view)
+
+# Arquitetura do Banco de Dados 🎲
+
 # Endpoints 🔥
 ## Batch
 Method: GET
