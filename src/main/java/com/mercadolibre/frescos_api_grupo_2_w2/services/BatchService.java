@@ -62,11 +62,34 @@ public class BatchService {
         return batchRepository.save(batch);
     }
 
+    public Batch updateBatch(BatchForm batchForm, Long batchId, Section section) {
+        Product foundProduct = productService.findProductById(UUID.fromString(batchForm.getProductId()));
+        Batch foundBatch = findBatchById(batchId);
+
+        foundBatch.setCurrentQuantity(batchForm.getCurrentQuantity());
+        foundBatch.setCurrentTemperature(batchForm.getCurrentTemperature());
+        foundBatch.setDueDate(batchForm.getDueDate());
+        foundBatch.setInitialQuantity(batchForm.getInitialQuantity());
+        foundBatch.setManufacturingDate(batchForm.getManufacturingDate());
+        foundBatch.setManufacturingTime(batchForm.getManufacturingTime());
+        foundBatch.setMinimumTemperature(batchForm.getMinimumTemperature());
+        foundBatch.setNumber(batchForm.getBatchNumber());
+        foundBatch.setProduct(foundProduct);
+
+        checkSection(section, foundBatch);
+
+        return batchRepository.save(foundBatch);
+    }
+
+    public Batch findBatchById(Long batchId) {
+        return batchRepository.findById(batchId).orElse(null);
+    }
+
 
     public List<Batch> findBatchesByProduct(UUID productId) {
         List<Batch> batchList = batchRepository.findBatchesByProduct_productId(productId);
 
-        if (productId == null) {
+        if (batchList.size() <= 0) {
             throw new ProductNotFoundException("Product not found in Batch");
         }
         return batchList;
