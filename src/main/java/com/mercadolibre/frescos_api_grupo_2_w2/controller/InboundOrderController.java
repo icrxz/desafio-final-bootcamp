@@ -21,9 +21,9 @@ public class InboundOrderController {
     }
 
     @PostMapping
-    public ResponseEntity createInboundOrder(@RequestBody @Valid InboundOrderForm inboundOrderForm) {
+    public ResponseEntity<InboundOrderResponse> createInboundOrder(@RequestBody @Valid InboundOrderForm inboundOrderForm) {
         InboundOrderResponse newInboundOrder = inboundOrderService.createInboundOrder(inboundOrderForm);
 
-        return new ResponseEntity(newInboundOrder, HttpStatus.CREATED);
+        return new ResponseEntity<>(newInboundOrder, HttpStatus.CREATED);
     }
 }

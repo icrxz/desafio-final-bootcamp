@@ -23,18 +23,18 @@ public class SectionController {
     }
 
     @PostMapping
-    public ResponseEntity createSection(@RequestBody @Valid SectionForm sectionForm) {
+    public ResponseEntity<SectionResponse> createSection(@RequestBody @Valid SectionForm sectionForm) {
         SectionResponse newSection = sectionService.createSection(sectionForm);
 
-        return new ResponseEntity(newSection, HttpStatus.CREATED);
+        return new ResponseEntity<>(newSection, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity findBatchBySection(@RequestParam UUID sectionId) {
+    public ResponseEntity<SectionResponse> findBatchBySection(@RequestParam UUID sectionId) {
 
         SectionResponse sectionResponse = SectionMapper.entityToResponse(sectionService.findSectionById(sectionId));
 
-        return new ResponseEntity(sectionResponse, HttpStatus.OK);
+        return new ResponseEntity<>(sectionResponse, HttpStatus.OK);
     }
 
 }

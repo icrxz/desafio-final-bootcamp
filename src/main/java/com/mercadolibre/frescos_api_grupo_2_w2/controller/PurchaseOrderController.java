@@ -22,26 +22,26 @@ public class PurchaseOrderController {
     }
 
     @PostMapping
-    public ResponseEntity createPurchaseOrder(@RequestBody @Valid PurchaseOrderForm purchaseOrderForm) {
+    public ResponseEntity<PurchaseOrderResponse> createPurchaseOrder(@RequestBody @Valid PurchaseOrderForm purchaseOrderForm) {
         PurchaseOrderResponse purchaseOrder = purchaseOrderService.createPurchaseOrder(purchaseOrderForm);
 
-        return new ResponseEntity(purchaseOrder, HttpStatus.CREATED);
+        return new ResponseEntity<>(purchaseOrder, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity findPurchaseOrderById(@RequestParam UUID orderId) {
+    public ResponseEntity<PurchaseOrderResponse> findPurchaseOrderById(@RequestParam UUID orderId) {
         PurchaseOrderResponse purchaseOrder = purchaseOrderService.findPurchaseOrderById(orderId);
 
-        return new ResponseEntity(purchaseOrder, HttpStatus.OK);
+        return new ResponseEntity<>(purchaseOrder, HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity updatePurchaseOrder(
+    public ResponseEntity<PurchaseOrderResponse> updatePurchaseOrder(
             @RequestParam UUID orderId,
             @RequestBody @Valid PurchaseOrderForm purchaseOrderForm
     ) {
         PurchaseOrderResponse purchaseOrder = purchaseOrderService.updatePurchaseOrder(orderId, purchaseOrderForm);
 
-        return new ResponseEntity(purchaseOrder, HttpStatus.OK);
+        return new ResponseEntity<>(purchaseOrder, HttpStatus.OK);
     }
 }

@@ -24,24 +24,30 @@ public class UserController {
     }
 
     @PostMapping("/seller")
-    public ResponseEntity<User> createSeller(@Valid @RequestBody SellerForm user) {
-       return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
+    public ResponseEntity<UserResponse> createSeller(@Valid @RequestBody SellerForm user) {
+        User createdSeller = userService.createUser(user);
+        
+       return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.entityToResponse(createdSeller));
     }
 
     @PostMapping("/supervisor")
-    public ResponseEntity<User> createSupervisor(@Valid @RequestBody SupervisorForm user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
+    public ResponseEntity<UserResponse> createSupervisor(@Valid @RequestBody SupervisorForm user) {
+        User createdSupervisor = userService.createUser(user);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.entityToResponse(createdSupervisor));
     }
 
     @PostMapping("/buyer")
-    public ResponseEntity<User> createBuyer(@Valid @RequestBody BuyerForm user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
+    public ResponseEntity<UserResponse> createBuyer(@Valid @RequestBody BuyerForm user) {
+        User createdBuyer = userService.createUser(user);
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.entityToResponse(createdBuyer));
     }
 
     @GetMapping
-    public ResponseEntity getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> users = UserMapper.entityListToResponseList(userService.getUsers());
 
-        return ResponseEntity.status(HttpStatus.OK).body(users);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }
