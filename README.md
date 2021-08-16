@@ -1,68 +1,92 @@
-# frescos-api-grupo-2-w2
+# Frescos Api Grupo 2
+Implementação da API do projeto final do Bootcamp Meli da wave 2. 
 
-# Spring Boot App model for Java 11
+## Sobre o projeto
 
-We provide a basic model for JDK 11 / Spring based web applications.
+![technology Java](https://img.shields.io/badge/technology-java-blue.svg?style=flat-square)
 
-Please address any questions and comments to [Fury Issue Tracker](https://github.com/mercadolibre/fury/issues).
+![technology Java](https://img.shields.io/badge/framework-spring--boot-blue.svg?style=flat-square)
 
-## Usage
+![technology Java](https://img.shields.io/badge/database-MySql-blue.svg?style=flat-square)
 
-### SCOPE
+### Biblioteca 
 
-The suffix of each Fury **SCOPE** is used to know which properties file to use, it is identified from the last '-' of the name of the scope.
+![technology Java](https://img.shields.io/badge/modelmapper-v2.4.4-green.svg?style=flat-square)
 
-If you want to run the application from your development IDE, you need to configure the environment variable **SCOPE=local** in the app luncher.
+![technology Java](https://img.shields.io/badge/java--jwt-v3.16.0-green.svg?style=flat-square)
 
-The properties of **application.yml** are always loaded and at the same time they are complemented with **application-<SCOPE_SUFFIX>.yml** properties. If a property is in both files, the one that is configured in **application-<SCOPE_SUFFIX>.yml** has preference over the property of **application.yml**.
+![technology Java](https://img.shields.io/badge/lombok-v1.18.20-green.svg?style=flat-square)
 
-For example, for the **SCOPE** 'items-loader-test' the **SCOPE_SUFFIX** would be 'test' and the loaded property files will be **application.yml** and **application-test.yml**
+# Especificações de Requisitos 📋
 
-### Web Server
+* [US01](https://drive.google.com/file/d/1X7YVc-DrSOa7KPR5nUF3Vi-ZkiMaUF9_/view)
+* [US02](https://drive.google.com/file/d/136B0QgcQ2czB-ij_vt1t9YUON8xP8LlX/view)
+* [US03](https://drive.google.com/file/d/1y7mP_PtO68TqkapqAOgvStwedq9WRr59/view)
+* [US04](https://drive.google.com/file/d/1DIWGoZe9I-dHUtASFoiQ1pG21n5mK5ZZ/view)
+* [US05](https://drive.google.com/file/d/1kcHtsFa35x5feUX9hCeHsW4HFk-hR6gy/view)
+* [US06](https://drive.google.com/file/d/1hNOHcg1V8ggv4qp7KgaG1CV4EHNNpaPE/view)
 
-Each Spring Boot web application includes an embedded web server. For servlet stack applications, Its supports three web Servers:
-  * Tomcat (maven dependency: `spring-boot-starter-tomcat`)
-  * Jetty (maven dependency: `spring-boot-starter-jetty`)
-  * Undertow (maven dependency: `spring-boot-starter-undertow`)
-
-This project is configured with Jetty, but to exchange WebServer, it is enough to configure the dependencies mentioned above in the pom.xml file.
-
-### Main
-
-The main class for this app is Application, where Spring context is initialized and SCOPE_SUFFIX is generated.
-
-### Error Handling
-
-We also provide basic handling for exceptions in ControllerExceptionHandler class.
-
-## Api Documentation
-
-This project uses Springfox to automate the generation of machine and human readable specifications for JSON APIs written using Spring. Springfox works by examining an application, once, at runtime to infer API semantics based on spring configurations, class structure and various compile time java Annotations.
-
-You can change this configuration in SpringfoxConfig class.
-
-## [Release Process](https://release-process.furycloud.io/#/)
-
-### Usage
-
-1. Specify the correct tag for your app in your `Dockerfile` and `Dockerfile.runtime`, according to the desired Java runtime version.
-
+# Endpoints 🔥
+## Batch
+Method: GET
+```java
+http://localhost:8080/api/v1/fresh-products/batch/list/order
 ```
-# Dockerfile
-FROM hub.furycloud.io/mercadolibre/java:1.11-mini
+```java
+http://localhost:8080/api/v1/fresh-products/batch/list
 ```
-
-You can find all available tags for your `Dockerfile` [here](https://github.com/mercadolibre/fury_java-mini#supported-tags)
-
+## InboundOrder 
+Method: POST
+```java
+http://localhost:8080/api/v1/fresh-products/inboundorder
 ```
-# Dockerfile.runtime
-FROM hub.furycloud.io/mercadolibre/java:1.11-runtime-mini
+## Product 
+Method: POST, GET
+```java
+http://localhost:8080/api/v1/fresh-products
 ```
-
-You can find all available tags for your `Dockerfile.runtime` [here](https://github.com/mercadolibre/fury_java-mini-runtime#supported-tags)
-
-2. Start coding!
-
-### Questions
-
-[Release Process Issue Tracker](https://github.com/mercadolibre/fury_release-process/issues)
+## Category
+Method: GET
+```java
+http://localhost:8080/api/v1/fresh-products/category/list
+```
+## Orders
+Method: POST, GET, PUT
+```java
+http://localhost:8080/api/v1/fresh-products/fresh-products/orders
+```
+## Sections
+Method: POST, GET
+```java
+http://localhost:8080/api/v1/sections
+```
+## User
+Method: GET
+```java
+http://localhost:8080/api/v1/user
+```
+## Seller
+Method: POST
+```java
+http://localhost:8080/api/v1/user/seller
+```
+## Supervisor 
+Method: POST
+```java
+http://localhost:8080/api/v1/user/supervisor
+```
+## Buyer 
+Method: POST
+```java
+http://localhost:8080/api/v1/user/buyer
+```
+## Warehouse 
+Method: POST, GET
+```java
+http://localhost:8080/api/v1/warehouses
+```
+## Team 🚀
+- [Igor Cruz](https://github.com/icrxz)
+- [Jonathan Cavalcanti](https://github.com/JCavalcanti-Meli)
+- [Marina Fachin](https://github.com/mafachin)
+- [Waschington Menezes](https://github.com/WaschingtonMenezes)
