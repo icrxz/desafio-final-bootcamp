@@ -3,10 +3,10 @@
 
 spring:
   datasource:
-    host: DB_MYSQL_DESAENV04_FRESCOAPI_FRESCOAPI_ENDPOINT
+    host: DB_MYSQL_DESAENV04_FRESCOSAPI_FRESCOSAPI_ENDPOINT
     db: frescosAPI
-    username: frescoAPI_WPROD
-    password: DB_MYSQL_DESAENV04_FRESCOAPI_FRESCOAPI_WPROD
+    username: frescosAPI_WPROD
+    password: DB_MYSQL_DESAENV04_FRESCOSAPI_FRESCOSAPI_WPROD
     initialization-mode: always
   jpa:
     show-sql: false
