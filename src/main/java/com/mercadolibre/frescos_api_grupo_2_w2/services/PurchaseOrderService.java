@@ -8,12 +8,15 @@ import com.mercadolibre.frescos_api_grupo_2_w2.entities.Buyer;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.PurchaseOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.PurchaseOrderProduct;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderStatusEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.PurchaseOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,16 +26,19 @@ public class PurchaseOrderService {
     private final PurchaseOrderRepository purchaseOrderRepository;
     private final BuyerService buyerService;
     private final ProductService productService;
+    private final BatchService batchService;
 
     @Autowired
     public PurchaseOrderService(
             PurchaseOrderRepository purchaseOrderRepository,
             BuyerService buyerService,
-            ProductService productService
+            ProductService productService,
+            BatchService batchService
     ) {
         this.purchaseOrderRepository = purchaseOrderRepository;
         this.buyerService = buyerService;
         this.productService = productService;
+        this.batchService = batchService;
     }
 
     public PurchaseOrderResponse findPurchaseOrderById(UUID purchaseOrderId) {
@@ -60,6 +66,11 @@ public class PurchaseOrderService {
 
         purchaseOrderProducts.forEach(purchaseOrderProduct -> purchaseOrderProduct.setPurchaseOrder(newPurchaseOrder));
         PurchaseOrder createdPurchase = purchaseOrderRepository.save(newPurchaseOrder);
+
+        purchaseOrderForm.getProducts().forEach(product ->
+                this.batchService.removeProductsFromBatches(product.getProductId(), product.getQuantity())
+        );
+
         BigDecimal orderTotalValue = getPurchaseOrderTotalValue(createdPurchase);
 
         return PurchaseOrderMapper.entityToResponse(createdPurchase, orderTotalValue);
@@ -80,6 +91,44 @@ public class PurchaseOrderService {
         BigDecimal orderTotalValue = getPurchaseOrderTotalValue(createdPurchase);
 
         return PurchaseOrderMapper.entityToResponse(createdPurchase, orderTotalValue);
+    }
+
+    public PurchaseOrderResponse returnPurchaseOrder(UUID purchaseOrderId, String userEmail) {
+        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(purchaseOrderId).orElse(null);
+        Buyer foundBuyer = buyerService.findBuyer(userEmail);
+
+        validatePurchaseReturn(purchaseOrder, foundBuyer);
+
+        purchaseOrder.getProduct().forEach( product ->
+            this.batchService.returnProductsFromBatches(product.getProduct().getProductId(), product.getQuantity())
+        );
+
+        purchaseOrder.setStatus(OrderStatusEnum.RETURNED);
+        purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
+
+        return PurchaseOrderMapper.entityToResponse(purchaseOrder);
+    }
+
+    public List<PurchaseOrderResponse> getReturnedPurchaseOrders() {
+        List<PurchaseOrder> returnedPurchaseOrders = purchaseOrderRepository.findPurchaseOrderByStatus(OrderStatusEnum.RETURNED);
+
+        if (returnedPurchaseOrders.size() <= 0) {
+            throw new ApiException("404", "Returned purchase orders not found", 404);
+        }
+
+        return PurchaseOrderMapper.entityListToResponseList(returnedPurchaseOrders);
+    }
+
+    private void validatePurchaseReturn(PurchaseOrder returnedPurchaseOrder, Buyer buyer) {
+        if (returnedPurchaseOrder == null) {
+            throw new ApiException("404", "Purchase order was not found", 404);
+        } else if (returnedPurchaseOrder.getStatus() != OrderStatusEnum.DELIVERED) {
+            throw new ApiException("400", "Only delivered purchases can be returned", 400);
+        } else if (returnedPurchaseOrder.getDate().isBefore(LocalDate.now().minusDays(1))) {
+            throw new ApiException("400", "Purchases over 1 day cannot be returned", 400);
+        } else if (buyer.getUserId() != returnedPurchaseOrder.getBuyer().getUserId() ) {
+            throw new ApiException("400", "Purchases can only be returned by the original buyer account", 400);
+        }
     }
 
     private List<PurchaseOrderProduct> createOrderProducts(List<PurchaseOrderProductsForm> purchaseOrderForm) {

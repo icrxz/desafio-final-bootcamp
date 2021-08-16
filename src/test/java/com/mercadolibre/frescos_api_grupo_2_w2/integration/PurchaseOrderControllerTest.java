@@ -7,6 +7,8 @@ import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.purchaseOrder.Purchase
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.purchaseOrder.PurchaseOrderProductsForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.purchaseOrder.PurchaseOrderResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
+import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderStatusEnum;
+import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.payloads.LoginPayload;
@@ -14,17 +16,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PurchaseOrderControllerTest extends ControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -102,6 +104,16 @@ public class PurchaseOrderControllerTest extends ControllerTest {
     private String loginBuyer() throws JsonProcessingException {
         // payload
         LoginPayload payload = new LoginPayload(this.buyer.getEmail(), "123");
+        String jsonPayload = objectMapper.writeValueAsString(payload);
+
+        ResponseEntity<String> responseEntity = this.testRestTemplate.postForEntity("/login", jsonPayload, String.class);
+        token = "Bearer "+ responseEntity.getBody();
+        return token;
+    }
+
+    private String loginSupervisor() throws JsonProcessingException {
+        // payload
+        LoginPayload payload = new LoginPayload(this.supervisor.getEmail(), "123");
         String jsonPayload = objectMapper.writeValueAsString(payload);
 
         ResponseEntity<String> responseEntity = this.testRestTemplate.postForEntity("/login", jsonPayload, String.class);
@@ -197,5 +209,60 @@ public class PurchaseOrderControllerTest extends ControllerTest {
         //assert
         assertEquals(200, result.getStatusCodeValue());
         assertThat(result.getBody().getPurchaseOrderId()).usingRecursiveComparison().isEqualTo(purchaseOrder.getPurchaseOrderId());
+    }
+
+    @Test
+    @DisplayName("should return 200 if return PurchaseOrder succeeds")
+    void returnPurchaseOrder_succeeds() throws Exception {
+        this.token = this.loginBuyer();
+        PurchaseOrder purchaseOrder = this.purchaseOrderEntity();
+
+        purchaseOrder.setStatus(OrderStatusEnum.DELIVERED);
+        purchaseOrderRepository.save(purchaseOrder);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/api/v1/fresh-products/orders/return-order")
+                .queryParam("orderId", purchaseOrder.getPurchaseOrderId());
+
+        HttpHeaders header = new HttpHeaders();
+        header.set("Authorization", token);
+
+        ResponseEntity<PurchaseOrderResponse> result = this.testRestTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.PUT,
+                new HttpEntity(header),
+                PurchaseOrderResponse.class
+        );
+
+        //assert
+        assertEquals(200, result.getStatusCodeValue());
+        assertEquals(purchaseOrder.getPurchaseOrderId(), result.getBody().getPurchaseOrderId());
+        assertEquals(OrderStatusEnum.RETURNED.getDescription(), result.getBody().getStatus());
+    }
+
+    @Test
+    @DisplayName("should return 200 if return PurchaseOrder succeeds")
+    void getReturnedPurchaseOrders_succeeds() throws Exception {
+        this.token = this.loginSupervisor();
+        PurchaseOrder purchaseOrder = this.purchaseOrderEntity();
+        PurchaseOrder purchaseOrder2 = this.purchaseOrderEntity();
+
+        purchaseOrder2.setStatus(OrderStatusEnum.RETURNED);
+        purchaseOrderRepository.save(purchaseOrder2);
+
+        HttpHeaders header = new HttpHeaders();
+        header.set("Authorization", token);
+
+        ResponseEntity<PurchaseOrderResponse[]> result = this.testRestTemplate.exchange(
+                "/api/v1/fresh-products/orders/return-order",
+                HttpMethod.GET,
+                new HttpEntity(header),
+                PurchaseOrderResponse[].class
+        );
+
+        //assert
+        assertEquals(200, result.getStatusCodeValue());
+        assertEquals(1, result.getBody().length);
+        assertEquals(purchaseOrder2.getPurchaseOrderId(), result.getBody()[0].getPurchaseOrderId());
+        assertEquals(OrderStatusEnum.RETURNED.getDescription(), result.getBody()[0].getStatus());
     }
 }
