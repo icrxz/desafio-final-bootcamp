@@ -1,7 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.dtos.mapper;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchCompleteResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchListResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;

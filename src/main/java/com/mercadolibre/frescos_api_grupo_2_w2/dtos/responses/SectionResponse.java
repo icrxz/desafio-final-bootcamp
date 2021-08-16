@@ -1,6 +1,5 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

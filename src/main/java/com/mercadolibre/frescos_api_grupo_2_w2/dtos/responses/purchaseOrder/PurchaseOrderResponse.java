@@ -1,6 +1,5 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.purchaseOrder;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

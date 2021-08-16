@@ -1,7 +1,6 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.services;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product.ProductByDueDateAndTypeForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
