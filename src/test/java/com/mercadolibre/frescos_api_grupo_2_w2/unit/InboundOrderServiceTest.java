@@ -16,7 +16,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +36,9 @@ public class InboundOrderServiceTest {
 
     @Mock
     private BatchService batchService;
+
+    @Mock
+    private ProductService productService;
 
     @Mock
     private SectionService sectionService;
@@ -85,5 +91,72 @@ public class InboundOrderServiceTest {
 
         assertThatThrownBy(() -> inboundOrderService.createInboundOrder(InboundOrderMock.validInboundOrderForm()))
                 .isInstanceOf(ApiException.class);
+    }
+
+    @Test
+    @DisplayName("should failed batches if quantity is bigger than the section stock")
+    void createInboundOrder_failsWithoutStock() {
+        InboundOrderForm form = InboundOrderMock.validInboundOrderForm();
+
+        Section createdSection = SectionMock.validSection();
+        createdSection.setMaxCapacity(10);
+        Product product = ProductMock.validProduct(null);
+        InboundOrder newInboundOrder = InboundOrder.builder()
+                .batchStock(new ArrayList<>())
+                .date(form.getOrderDate())
+                .number(form.getOrderNumber())
+                .section(createdSection)
+                .build();
+
+        BatchForm batch = BatchMock.validBatchForm();
+        batch.setInitialQuantity(1000);
+        batch.setCurrentQuantity(1000);
+        batch.setProductId(product.getProductId().toString());
+        form.setBatchStock(Arrays.asList(batch));
+
+        given(sectionService.findSectionById(SectionMock.sectionId)).willReturn(createdSection);
+        given(batchService.createBatch(batch, createdSection, newInboundOrder)).willThrow(new ApiException("400", "Product and Section mut be of the same type", 400));
+        given(inboundOrderRepository.save(any())).willReturn(newInboundOrder);
+
+        InboundOrderResponse response = this.inboundOrderService.createInboundOrder(form);
+
+        assertEquals(response.getOrderNumber(), form.getOrderNumber());
+        assertTrue(response.getSuccessBatches().isEmpty());
+        assertFalse(response.getErrorMessages().isEmpty());
+        assertFalse(response.getFailedBatches().isEmpty());
+    }
+
+    @Test
+    @DisplayName("should failed batches if quantity is bigger than the section stock")
+    void updateInboundOrder_failsWithoutStock() {
+        InboundOrderForm form = InboundOrderMock.validInboundOrderForm();
+
+        Section createdSection = SectionMock.validSection();
+        createdSection.setMaxCapacity(10);
+        Product product = ProductMock.validProduct(null);
+        InboundOrder newInboundOrder = InboundOrder.builder()
+                .batchStock(new ArrayList<>())
+                .date(form.getOrderDate())
+                .number(form.getOrderNumber())
+                .section(createdSection)
+                .build();
+
+        BatchForm batch = BatchMock.validBatchForm();
+        batch.setInitialQuantity(1000);
+        batch.setCurrentQuantity(1000);
+        batch.setProductId(product.getProductId().toString());
+        form.setBatchStock(Arrays.asList(batch));
+
+        given(sectionService.findSectionById(SectionMock.sectionId)).willReturn(createdSection);
+        given(batchService.createBatch(batch, createdSection, newInboundOrder)).willThrow(new ApiException("400", "Product and Section mut be of the same type", 400));
+        given(inboundOrderRepository.findById(newInboundOrder.getNumber())).willReturn(Optional.of(newInboundOrder));
+        given(inboundOrderRepository.save(any())).willReturn(newInboundOrder);
+
+        InboundOrderResponse response = this.inboundOrderService.updateInboundOrder(newInboundOrder.getNumber(), form);
+
+        assertEquals(response.getOrderNumber(), form.getOrderNumber());
+        assertTrue(response.getSuccessBatches().isEmpty());
+        assertFalse(response.getErrorMessages().isEmpty());
+        assertFalse(response.getFailedBatches().isEmpty());
     }
 }
