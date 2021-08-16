@@ -186,7 +186,7 @@ public class PurchaseOrderServiceTest {
 
         // assert
         assertThat(response.getDate()).isEqualTo(purchaseOrderForm.getDate());
-        assertThat(response.getStatus()).isEqualTo(OrderStatusEnum.TRANSPORT);
+        assertThat(response.getStatus()).isEqualTo(OrderStatusEnum.TRANSPORT.getDescription());
         assertThat(response.getPurchaseOrderItems().size()).isEqualTo(1);
         assertThat(response.getTotalPrice()).isEqualTo(BigDecimal.valueOf(31.00));
     }

@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "purchase_order")
 public class PurchaseOrder{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,5 +32,6 @@ public class PurchaseOrder{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseOrder")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<PurchaseOrderProduct> product;
+    @Builder.Default
+    private List<PurchaseOrderProduct> product = new ArrayList<>();
 }

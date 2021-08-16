@@ -10,6 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,9 +37,11 @@ public class Product {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Batch> batches;
+    @Builder.Default
+    private List<Batch> batches = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<PurchaseOrderProduct> purchaseOrder;
+    @Builder.Default
+    private List<PurchaseOrderProduct> purchaseOrder = new ArrayList<>();
 }

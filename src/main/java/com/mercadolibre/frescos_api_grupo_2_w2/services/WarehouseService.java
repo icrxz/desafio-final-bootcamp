@@ -66,9 +66,7 @@ public class WarehouseService {
             throw new ApiException("404", "Warehouses with product " + productId + " not found", 404);
         }
 
-        Map<UUID, List<Batch>> batchesByWarehouse = batchesByProduct.stream().collect(Collectors.groupingBy(batch -> {
-            return batch.getInboundOrder().getSection().getWarehouse().getWarehouseId();
-        }));
+        Map<UUID, List<Batch>> batchesByWarehouse = batchesByProduct.stream().collect(Collectors.groupingBy(batch -> batch.getInboundOrder().getSection().getWarehouse().getWarehouseId()));
 
         List<WarehouseWithQuantityResponse> warehouses = batchesByWarehouse.entrySet().stream().map(warehouse -> {
             long productQuantity = this.getWarehouseProductQuantity(warehouse.getValue());

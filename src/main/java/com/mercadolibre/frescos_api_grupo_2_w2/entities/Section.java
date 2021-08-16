@@ -19,6 +19,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "section")
 public class Section implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +27,7 @@ public class Section implements Serializable {
 
     private long maxCapacity;
 
+    @Enumerated(EnumType.STRING)
     private ProductTypeEnum productType;
 
     @ManyToOne
@@ -33,5 +35,6 @@ public class Section implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "section")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Builder.Default
     private List<InboundOrder> orders = new ArrayList<>();
 }

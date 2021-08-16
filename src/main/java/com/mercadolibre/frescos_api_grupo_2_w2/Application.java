@@ -1,12 +1,8 @@
 package com.mercadolibre.frescos_api_grupo_2_w2;
 
 import com.mercadolibre.frescos_api_grupo_2_w2.config.SpringConfig;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.user.SupervisorForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Supervisor;
-import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SellerRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.SupervisorRepository;
-import com.mercadolibre.frescos_api_grupo_2_w2.repositories.UserRepository;
-import com.mercadolibre.frescos_api_grupo_2_w2.services.UserService;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.ScopeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

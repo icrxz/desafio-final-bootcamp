@@ -25,23 +25,23 @@ public class WarehouseController {
     }
 
     @PostMapping
-    public ResponseEntity createWarehouse(@RequestBody @Valid WarehouseForm warehouseForm) {
+    public ResponseEntity<WarehouseResponse> createWarehouse(@RequestBody @Valid WarehouseForm warehouseForm) {
         WarehouseResponse newWarehouse = warehouseService.createWarehouse(warehouseForm);
 
-        return new ResponseEntity(newWarehouse, HttpStatus.CREATED);
+        return new ResponseEntity<>(newWarehouse, HttpStatus.CREATED);
     }
 
     @GetMapping("/list")
-    public ResponseEntity getAllWarehouses() {
+    public ResponseEntity<List<WarehouseResponse>> getAllWarehouses() {
         List<WarehouseResponse> warehouses = WarehouseMapper.entityListToResponseList(warehouseService.getWarehouses());
 
-        return new ResponseEntity(warehouses, HttpStatus.OK);
+        return new ResponseEntity<>(warehouses, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity getWarehousesByProductId(@RequestParam UUID productId) {
+    public ResponseEntity<WarehousesWithProductResponse> getWarehousesByProductId(@RequestParam UUID productId) {
         WarehousesWithProductResponse warehouses = warehouseService.getWarehousesByProduct(productId);
 
-        return new ResponseEntity(warehouses, HttpStatus.OK);
+        return new ResponseEntity<>(warehouses, HttpStatus.OK);
     }
 }

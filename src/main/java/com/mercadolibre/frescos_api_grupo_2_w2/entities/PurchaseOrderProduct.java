@@ -14,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @IdClass(PurchaseOrderProductId.class)
+@Table(name = "purchase_order_product")
 public class PurchaseOrderProduct {
     @Id
     @ManyToOne

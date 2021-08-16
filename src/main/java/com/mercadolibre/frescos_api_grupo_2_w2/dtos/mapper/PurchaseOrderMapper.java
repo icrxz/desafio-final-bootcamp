@@ -11,7 +11,7 @@ public class PurchaseOrderMapper {
                 .purchaseOrderId(purchaseOrder.getPurchaseOrderId())
                 .purchaseOrderItems(PurchaseOrderProductMapper.entityListToResponseList(purchaseOrder.getProduct()))
                 .date(purchaseOrder.getDate())
-                .status(purchaseOrder.getStatus())
+                .status(purchaseOrder.getStatus().getDescription())
                 .totalPrice(orderValue)
                 .build();
     }

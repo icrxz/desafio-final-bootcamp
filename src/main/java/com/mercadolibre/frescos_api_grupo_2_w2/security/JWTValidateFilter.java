@@ -17,9 +17,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class JWTValidateFilter extends BasicAuthenticationFilter {
-//    @Autowired
-//    private UserService userService;
-
     public static final String HEADER_ATTRIBUTE = "Authorization";
     public static final String ATTRIBUTE_PREFIX = "Bearer ";
 

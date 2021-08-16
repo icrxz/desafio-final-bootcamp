@@ -1,6 +1,5 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.purchaseOrder;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,7 @@ import java.util.UUID;
 public class PurchaseOrderResponse {
     private UUID purchaseOrderId;
     private LocalDate date;
-    private OrderStatusEnum status;
+    private String status;
     private List<PurchaseOrderProductResponse> purchaseOrderItems;
     private BigDecimal totalPrice;
 }
