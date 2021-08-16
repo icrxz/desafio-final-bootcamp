@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class BatchForm {
+    @Min(value = 0)
+    @JsonProperty("batch_id")
+    private long batchId;
+
     @NotNull
     @Min(value = 0)
     @JsonProperty("batch_number")
