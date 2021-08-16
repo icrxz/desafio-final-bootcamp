@@ -5,16 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.BatchForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrder.InboundOrderForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.InboundOrder.InboundOrderSectionForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.product.ProductForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.purchaseOrder.PurchaseOrderForm;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.forms.purchaseOrder.PurchaseOrderProductsForm;
 import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.InboundOrderResponse;
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.purchaseOrder.PurchaseOrderResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.payloads.LoginPayload;
-import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -168,7 +163,7 @@ public class InboundOrderControllerTest extends ControllerTest{
     @Test
     @DisplayName("should return 200 if updateInboundOrder succeeds")
     void editInboundOrder_succeeds() throws Exception {
-        this.token = this.loginSupervisor();
+        this.token = this.loginSeller();
 
         Supervisor supervisorMock = UserSupervisorMock.validSupervisor();
         supervisorMock = userRepository.save(supervisorMock);

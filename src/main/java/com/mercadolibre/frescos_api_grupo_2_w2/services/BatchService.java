@@ -85,6 +85,47 @@ public class BatchService {
         return batchRepository.findById(batchId).orElse(null);
     }
 
+    public void removeProductsFromBatches(UUID productId, int quantity) {
+        List<Batch> batchesWithProduct = findBatchesByProduct(productId);
+        int quantityMissed = quantity;
+
+        for (Batch batch : batchesWithProduct) {
+            int batchRemainQuantity = batch.getCurrentQuantity() - quantityMissed;
+
+            if (batchRemainQuantity >= 0) {
+                batch.setCurrentQuantity(batchRemainQuantity);
+                batchRepository.save(batch);
+
+                break;
+            } else {
+                batch.setCurrentQuantity(0);
+                batchRepository.save(batch);
+
+                quantityMissed = Math.abs(batchRemainQuantity);
+            }
+        };
+    }
+
+    public void returnProductsFromBatches(UUID productId, long quantity) {
+        List<Batch> batchesWithProduct = findBatchesByProduct(productId);
+        Long quantityReturned = quantity;
+
+        for (Batch batch : batchesWithProduct) {
+            Long batchRemainQuantity = batch.getInitialQuantity() - (batch.getCurrentQuantity() + quantityReturned);
+
+            if (batchRemainQuantity >= 0) {
+                batch.setCurrentQuantity(batch.getCurrentQuantity() + quantityReturned.intValue());
+                batchRepository.save(batch);
+
+                break;
+            } else {
+                batch.setCurrentQuantity(batch.getInitialQuantity());
+                batchRepository.save(batch);
+
+                quantityReturned = Math.abs(batchRemainQuantity);
+            }
+        };
+    }
 
     public List<Batch> findBatchesByProduct(UUID productId) {
         List<Batch> batchList = batchRepository.findBatchesByProduct_productId(productId);
