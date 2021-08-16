@@ -9,7 +9,8 @@ public enum OrderStatusEnum {
     CONFIRMING(0, "Confirmando"),
     SORTING(1, "Separando"),
     TRANSPORT(2, "Transporte"),
-    DELIVERED(3, "Entregue");
+    DELIVERED(3, "Entregue"),
+    RETURNED(4, "Devolvido");
 
     private final Integer code;
     private final String description;
