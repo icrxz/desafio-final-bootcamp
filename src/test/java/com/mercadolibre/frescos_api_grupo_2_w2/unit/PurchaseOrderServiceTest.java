@@ -7,10 +7,7 @@ import com.mercadolibre.frescos_api_grupo_2_w2.entities.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderStatusEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.PurchaseOrderRepository;
-import com.mercadolibre.frescos_api_grupo_2_w2.services.BuyerService;
-import com.mercadolibre.frescos_api_grupo_2_w2.services.InboundOrderService;
-import com.mercadolibre.frescos_api_grupo_2_w2.services.ProductService;
-import com.mercadolibre.frescos_api_grupo_2_w2.services.PurchaseOrderService;
+import com.mercadolibre.frescos_api_grupo_2_w2.services.*;
 import com.mercadolibre.frescos_api_grupo_2_w2.util.mocks.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -47,12 +45,15 @@ public class PurchaseOrderServiceTest {
     private ProductService productService;
 
     @Mock
+    private BatchService batchService;
+
+    @Mock
     private InboundOrderService inboundOrderService;
 
     @BeforeEach
     public void setUp() throws Exception {
         purchaseOrderRepository.deleteAll();
-        purchaseOrderService = new PurchaseOrderService(purchaseOrderRepository, buyerService, productService);
+        purchaseOrderService = new PurchaseOrderService(purchaseOrderRepository, buyerService, productService, batchService);
     }
 
     @Test
@@ -189,5 +190,78 @@ public class PurchaseOrderServiceTest {
         assertThat(response.getStatus()).isEqualTo(OrderStatusEnum.TRANSPORT.getDescription());
         assertThat(response.getPurchaseOrderItems().size()).isEqualTo(1);
         assertThat(response.getTotalPrice()).isEqualTo(BigDecimal.valueOf(31.00));
+    }
+
+    @Test
+    @DisplayName("should throws if purchase order id was not found")
+    void returnProduct_failsIfOrderIdWasNotFound () {
+        Buyer buyerMock = UserBuyerMock.validBuyer();
+        PurchaseOrder purchaseOrderMock = PurchaseOrderMock.validPurchaseOrder(null);
+
+        given(purchaseOrderRepository.findById(purchaseOrderMock.getPurchaseOrderId())).willReturn(Optional.empty());
+        given(buyerService.findBuyer(buyerMock.getEmail())).willReturn(buyerMock);
+
+        assertThatThrownBy(() -> purchaseOrderService.returnPurchaseOrder(purchaseOrderMock.getPurchaseOrderId(), buyerMock.getEmail()))
+                .isInstanceOf(ApiException.class)
+                .hasMessage("Purchase order was not found");
+    }
+
+    @Test
+    @DisplayName("should throws if purchase order status was not delivered")
+    void returnProduct_failsIfStatusIsNotDelivered () {
+        Buyer buyerMock = UserBuyerMock.validBuyer();
+        PurchaseOrder purchaseOrderMock = PurchaseOrderMock.validPurchaseOrder(null);
+        purchaseOrderMock.setStatus(OrderStatusEnum.CONFIRMING);
+
+        given(purchaseOrderRepository.findById(purchaseOrderMock.getPurchaseOrderId())).willReturn(Optional.of(purchaseOrderMock));
+        given(buyerService.findBuyer(buyerMock.getEmail())).willReturn(buyerMock);
+
+        assertThatThrownBy(() -> purchaseOrderService.returnPurchaseOrder(purchaseOrderMock.getPurchaseOrderId(), buyerMock.getEmail()))
+                .isInstanceOf(ApiException.class)
+                .hasMessage("Only delivered purchases can be returned");
+    }
+
+    @Test
+    @DisplayName("should throws if purchase order was made more than 1 day")
+    void returnProduct_failsIfOrderIsPastOneDay () {
+        Buyer buyerMock = UserBuyerMock.validBuyer();
+        PurchaseOrder purchaseOrderMock = PurchaseOrderMock.validPurchaseOrder(null);
+        purchaseOrderMock.setStatus(OrderStatusEnum.DELIVERED);
+        purchaseOrderMock.setDate(LocalDate.now().minusDays(2));
+
+        given(purchaseOrderRepository.findById(purchaseOrderMock.getPurchaseOrderId())).willReturn(Optional.of(purchaseOrderMock));
+        given(buyerService.findBuyer(buyerMock.getEmail())).willReturn(buyerMock);
+
+        assertThatThrownBy(() -> purchaseOrderService.returnPurchaseOrder(purchaseOrderMock.getPurchaseOrderId(), buyerMock.getEmail()))
+                .isInstanceOf(ApiException.class)
+                .hasMessage("Purchases over 1 day cannot be returned");
+    }
+
+    @Test
+    @DisplayName("should throws if user who made requisition is different of purchase order buyer")
+    void returnProduct_failsIfUserIsDifferentThanOrderBuyer () {
+        Buyer buyerMock = UserBuyerMock.validBuyer();
+        Buyer buyerMock2 = UserBuyerMock.validBuyer();
+        buyerMock2.setUserId(buyerMock.getUserId() + 1L);
+        PurchaseOrder purchaseOrderMock = PurchaseOrderMock.validPurchaseOrder(null);
+        purchaseOrderMock.setStatus(OrderStatusEnum.DELIVERED);
+        purchaseOrderMock.setBuyer(buyerMock2);
+
+        given(purchaseOrderRepository.findById(purchaseOrderMock.getPurchaseOrderId())).willReturn(Optional.of(purchaseOrderMock));
+        given(buyerService.findBuyer(buyerMock.getEmail())).willReturn(buyerMock);
+
+        assertThatThrownBy(() -> purchaseOrderService.returnPurchaseOrder(purchaseOrderMock.getPurchaseOrderId(), buyerMock.getEmail()))
+                .isInstanceOf(ApiException.class)
+                .hasMessage("Purchases can only be returned by the original buyer account");
+    }
+
+    @Test
+    @DisplayName("should throws if user who made requisition is different of purchase order buyer")
+    void getReturnedProduct_failsIfEmpty () {
+        given(purchaseOrderRepository.findPurchaseOrderByStatus(OrderStatusEnum.RETURNED)).willReturn(Arrays.asList());
+
+        assertThatThrownBy(() -> purchaseOrderService.getReturnedPurchaseOrders())
+                .isInstanceOf(ApiException.class)
+                .hasMessage("Returned purchase orders not found");
     }
 }

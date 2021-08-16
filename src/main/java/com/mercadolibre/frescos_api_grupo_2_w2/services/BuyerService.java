@@ -24,4 +24,14 @@ public class BuyerService {
 
         return foundBuyer;
     }
+
+    public Buyer findBuyer(String email) {
+        Buyer foundBuyer = buyerRepository.findByEmail(email).orElse(null);
+
+        if (foundBuyer == null) {
+            throw new ApiException("404", "Buyer not found with this email", 404);
+        }
+
+        return foundBuyer;
+    }
 }

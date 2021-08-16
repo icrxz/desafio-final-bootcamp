@@ -1,13 +1,10 @@
 package com.mercadolibre.frescos_api_grupo_2_w2.unit;
 
-import com.mercadolibre.frescos_api_grupo_2_w2.dtos.responses.BatchResponse;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Batch;
-import com.mercadolibre.frescos_api_grupo_2_w2.entities.InboundOrder;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.Product;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.OrderBatch;
 import com.mercadolibre.frescos_api_grupo_2_w2.entities.enums.ProductTypeEnum;
 import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ApiException;
-import com.mercadolibre.frescos_api_grupo_2_w2.exceptions.ProductNotFoundException;
 import com.mercadolibre.frescos_api_grupo_2_w2.repositories.BatchRepository;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.BatchService;
 import com.mercadolibre.frescos_api_grupo_2_w2.services.ProductService;
@@ -25,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;

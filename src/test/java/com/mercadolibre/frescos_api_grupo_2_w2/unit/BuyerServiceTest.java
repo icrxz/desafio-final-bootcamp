@@ -49,6 +49,22 @@ public class BuyerServiceTest {
     }
 
     @Test
+    @DisplayName("should return a Buyer if findBuyer succeeds")
+    void findBuyerByEmail_succeeds() {
+        Buyer buyerMock = UserBuyerMock.validBuyer();
+
+        //arrange
+        given(buyerRepository.findByEmail(buyerMock.getEmail())).willReturn(Optional.of(buyerMock));
+
+        // act
+        Buyer user = this.buyerService.findBuyer(buyerMock.getEmail());
+
+        // assert
+        assertThat(user.getEmail()).isEqualTo("buyer@email.com");
+        assertThat(user.getRole()).isEqualTo("BUYER");
+    }
+
+    @Test
     @DisplayName("should throw ApiException if try find buyer that not exist")
     void findBuyer_notExistsBuyer() {
         //arrange
