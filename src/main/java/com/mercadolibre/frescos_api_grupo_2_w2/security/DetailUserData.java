@@ -9,28 +9,28 @@ import java.util.*;
 
 public class DetailUserData implements UserDetails {
 
-    private final Optional<User> usuario;
+    private final Optional<User> user;
 
-    public DetailUserData(Optional<User> usuario) {
-        this.usuario = usuario;
+    public DetailUserData(Optional<User> user) {
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 
-        authorities.add(new SimpleGrantedAuthority(usuario.orElse(new User()).getRole()));
+        authorities.add(new SimpleGrantedAuthority(user.orElse(new User()).getRole()));
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return usuario.orElse(new User()).getPassword();
+        return user.orElse(new User()).getPassword();
     }
 
     @Override
     public String getUsername() {
-        return usuario.orElse(new User()).getEmail();
+        return user.orElse(new User()).getEmail();
     }
 
     @Override

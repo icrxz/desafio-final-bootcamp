@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
         Optional<User> user = this.userRepository.findByEmail(userForm.getEmail());
 
         if (user.isPresent()) {
-            throw new UserAlreadyExists("Este email já está cadastrado");
+            throw new UserAlreadyExists("This email is already registered");
         }
 
         newUser.setPassword(encoder.encode(newUser.getPassword()));
@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(s);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
+            throw new UsernameNotFoundException("User [" + s + "] not found");
         }
         return new DetailUserData(user);
     }
@@ -78,7 +78,7 @@ public class UserService implements UserDetailsService {
     public User loadUserByEmail(String s) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(s);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("Usuário [" + s + "] não encontrado");
+            throw new UsernameNotFoundException("User [" + s + "] not found");
         }
         return user.get();
     }
