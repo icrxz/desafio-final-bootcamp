@@ -72,7 +72,7 @@ public class InboundOrderService {
 
         inboundOrderForm.getBatchStock().forEach(batch -> {
             try {
-                Batch foundBatch = batchService.findBatchById(batch.getBatchNumber());
+                Batch foundBatch = batchService.findBatchById(batch.getBatchId());
                 Batch newBatch;
 
                 if (foundBatch == null) {
