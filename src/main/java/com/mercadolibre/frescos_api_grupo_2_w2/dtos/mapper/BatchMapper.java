@@ -25,7 +25,7 @@ public abstract class BatchMapper {
     }
 
     public static List<BatchResponse> batchListToListResponse(List<Batch> batches) {
-        return batches.stream().map(batch -> batchEntityToResponse(batch)).collect(Collectors.toList());
+        return batches.stream().map(BatchMapper::batchEntityToResponse).collect(Collectors.toList());
     }
 
     public static BatchResponse batchFormToResponse(BatchForm batchForm) {
@@ -43,7 +43,7 @@ public abstract class BatchMapper {
     }
 
     public static List<BatchResponse> batchFormListToListResponse(List<BatchForm> batches) {
-        return batches.stream().map(batch -> batchFormToResponse(batch)).collect(Collectors.toList());
+        return batches.stream().map(BatchMapper::batchFormToResponse).collect(Collectors.toList());
     }
 
     public static BatchListResponse batchListEntityToResponse(Batch batch) {
@@ -55,6 +55,6 @@ public abstract class BatchMapper {
     }
 
     public static List<BatchListResponse> batchRolToListResponse(List<Batch> batches) {
-        return batches.stream().map(batch -> batchListEntityToResponse(batch)).collect(Collectors.toList());
+        return batches.stream().map(BatchMapper::batchListEntityToResponse).collect(Collectors.toList());
     }
 }
