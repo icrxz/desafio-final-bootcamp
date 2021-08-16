@@ -17,6 +17,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "inbound_order")
 public class InboundOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

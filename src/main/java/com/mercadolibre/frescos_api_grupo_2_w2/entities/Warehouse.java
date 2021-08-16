@@ -17,6 +17,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "warehouse")
 public class Warehouse{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,5 +28,6 @@ public class Warehouse{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "warehouse")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Builder.Default
     private List<Section> sections = new ArrayList<>();
 }

@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,5 +19,5 @@ public class Buyer extends User{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "buyer")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<PurchaseOrder> purchaseOrders;
+    private List<PurchaseOrder> purchaseOrders = new ArrayList<>();
 }

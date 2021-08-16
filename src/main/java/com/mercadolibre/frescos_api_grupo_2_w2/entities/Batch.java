@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "batch")
 public class Batch {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
