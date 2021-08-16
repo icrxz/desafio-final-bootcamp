@@ -17,7 +17,7 @@ import java.util.UUID;
 public class PurchaseOrderResponse {
     private UUID purchaseOrderId;
     private LocalDate date;
-    private OrderStatusEnum status;
+    private String status;
     private List<PurchaseOrderProductResponse> purchaseOrderItems;
     private BigDecimal totalPrice;
 }

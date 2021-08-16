@@ -103,7 +103,7 @@ public class ProductServiceTest {
 
          // assert
          assertThat(createProduct.getName()).isEqualTo("any_name");
-         assertThat(createProduct.getType()).isEqualTo(ProductTypeEnum.FRESH);
+         assertThat(createProduct.getType()).isEqualTo(ProductTypeEnum.FRESH.getDescription());
          assertThat(createProduct.getSellerId()).isEqualTo(1L);
     }
 

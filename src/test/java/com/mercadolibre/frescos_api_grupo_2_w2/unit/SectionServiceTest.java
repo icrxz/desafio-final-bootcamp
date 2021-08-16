@@ -108,7 +108,7 @@ public class SectionServiceTest {
         assertThat(createdSection.getSectionId()).isEqualTo(SectionMock.sectionId);
         assertThat(createdSection.getMaxCapacity()).isEqualTo(100);
         assertThat(createdSection.getWarehouseId()).isEqualTo(warehouse.getWarehouseId());
-        assertThat(createdSection.getType()).isEqualTo(ProductTypeEnum.FRESH);
+        assertThat(createdSection.getType()).isEqualTo(ProductTypeEnum.FRESH.getDescription());
     }
 
     @Test

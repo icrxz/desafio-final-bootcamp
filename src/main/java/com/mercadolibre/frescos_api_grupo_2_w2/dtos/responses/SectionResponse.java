@@ -14,6 +14,6 @@ import java.util.UUID;
 public class SectionResponse {
     private UUID sectionId;
     private long maxCapacity;
-    private ProductTypeEnum type;
+    private String type;
     private UUID warehouseId;
 }
