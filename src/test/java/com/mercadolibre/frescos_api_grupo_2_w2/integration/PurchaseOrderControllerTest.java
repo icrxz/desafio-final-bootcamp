@@ -164,7 +164,7 @@ public class PurchaseOrderControllerTest extends ControllerTest {
         HttpHeaders header = new HttpHeaders();
         header.set("Authorization", token);
 
-        HttpEntity<ProductForm> request = new HttpEntity(editedPurchaseOrder, header);
+        HttpEntity<PurchaseOrderForm> request = new HttpEntity(editedPurchaseOrder, header);
         ResponseEntity<PurchaseOrderResponse> result = this.testRestTemplate.exchange(
                 builder.toUriString(),
                 HttpMethod.PUT,
